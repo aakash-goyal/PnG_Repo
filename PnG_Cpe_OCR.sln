@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PnG_Cpe_OCR", "PnG_Cpe_OCR\PnG_Cpe_OCR.csproj", "{D81A484B-6B73-45F3-8D0E-64A2AEEF3A4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OCR_Operations", "OCR_Operations\OCR_Operations.csproj", "{9929C149-D886-488D-B215-EC81A3B8C1A0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D81A484B-6B73-45F3-8D0E-64A2AEEF3A4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D81A484B-6B73-45F3-8D0E-64A2AEEF3A4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D81A484B-6B73-45F3-8D0E-64A2AEEF3A4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D81A484B-6B73-45F3-8D0E-64A2AEEF3A4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9929C149-D886-488D-B215-EC81A3B8C1A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9929C149-D886-488D-B215-EC81A3B8C1A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9929C149-D886-488D-B215-EC81A3B8C1A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9929C149-D886-488D-B215-EC81A3B8C1A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7B7EA605-0DB1-46D3-BCF8-C5C53E6C5F82}
+	EndGlobalSection
+EndGlobal

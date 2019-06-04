@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="cpe_devModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CpeEntryDataPointValues">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DataPointDefinitionId" Type="int" Nullable="false" />
+          <Property Name="Value" Type="nvarchar(max)" />
+          <Property Name="IsBlobValue" Type="bit" Nullable="false" />
+          <Property Name="BlobValue" Type="varbinary(max)" />
+          <Property Name="BlobFileName" Type="nvarchar(max)" />
+          <Property Name="CpeDefinitionId" Type="int" />
+          <Property Name="CPEEntryId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DataPointDefinitions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" />
+          <Property Name="SequenceNumber" Type="int" Nullable="false" />
+          <Property Name="CpeDefinitionId" Type="int" />
+          <Property Name="DataSetDefinitionId" Type="int" />
+          <Property Name="DataTypeId" Type="int" />
+          <Property Name="IsCalculated" Type="int" Nullable="false" />
+          <Property Name="CalculationFunction" Type="nvarchar(max)" />
+          <Property Name="IsConstantValue" Type="int" Nullable="false" />
+          <Property Name="ConstantValue" Type="nvarchar(max)" />
+          <Property Name="DPShortName" Type="nvarchar(max)" />
+          <Property Name="DataSetDisplayOptionsJson" Type="nvarchar(max)" />
+          <Property Name="VariantId" Type="int" />
+          <Property Name="Minimum" Type="nvarchar(max)" />
+          <Property Name="Target" Type="nvarchar(max)" />
+          <Property Name="Maximum" Type="nvarchar(max)" />
+          <Property Name="IsRequired" Type="nvarchar(max)" />
+          <Property Name="InputMask" Type="nvarchar(max)" />
+          <Property Name="InvalidMessage" Type="nvarchar(max)" />
+          <Property Name="ValidateFunction" Type="nvarchar(max)" />
+          <Property Name="TabIndex" Type="int" />
+          <Property Name="Range" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK_dbo_CpeEntryDataPointValues_dbo_DataPointDefinitions_DataPointDefinitionId">
+          <End Role="DataPointDefinitions" Type="Self.DataPointDefinitions" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CpeEntryDataPointValues" Type="Self.CpeEntryDataPointValues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DataPointDefinitions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CpeEntryDataPointValues">
+              <PropertyRef Name="DataPointDefinitionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="cpe_devModelStoreContainer">
+          <EntitySet Name="CpeEntryDataPointValues" EntityType="Self.CpeEntryDataPointValues" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DataPointDefinitions" EntityType="Self.DataPointDefinitions" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_CpeEntryDataPointValues_dbo_DataPointDefinitions_DataPointDefinitionId" Association="Self.FK_dbo_CpeEntryDataPointValues_dbo_DataPointDefinitions_DataPointDefinitionId">
+            <End Role="DataPointDefinitions" EntitySet="DataPointDefinitions" />
+            <End Role="CpeEntryDataPointValues" EntitySet="CpeEntryDataPointValues" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="cpe_devModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CpeEntryDataPointValue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DataPointDefinitionId" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsBlobValue" Type="Boolean" Nullable="false" />
+          <Property Name="BlobValue" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="BlobFileName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CpeDefinitionId" Type="Int32" />
+          <Property Name="CPEEntryId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DataPointDefinition" Relationship="Self.FK_dbo_CpeEntryDataPointValues_dbo_DataPointDefinitions_DataPointDefinitionId" FromRole="CpeEntryDataPointValues" ToRole="DataPointDefinitions" />
+        </EntityType>
+        <EntityType Name="DataPointDefinition">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SequenceNumber" Type="Int32" Nullable="false" />
+          <Property Name="CpeDefinitionId" Type="Int32" />
+          <Property Name="DataSetDefinitionId" Type="Int32" />
+          <Property Name="DataTypeId" Type="Int32" />
+          <Property Name="IsCalculated" Type="Int32" Nullable="false" />
+          <Property Name="CalculationFunction" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsConstantValue" Type="Int32" Nullable="false" />
+          <Property Name="ConstantValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DPShortName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DataSetDisplayOptionsJson" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="VariantId" Type="Int32" />
+          <Property Name="Minimum" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Target" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Maximum" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsRequired" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InputMask" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InvalidMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ValidateFunction" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TabIndex" Type="Int32" />
+          <Property Name="Range" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CpeEntryDataPointValues" Relationship="Self.FK_dbo_CpeEntryDataPointValues_dbo_DataPointDefinitions_DataPointDefinitionId" FromRole="DataPointDefinitions" ToRole="CpeEntryDataPointValues" />
+        </EntityType>
+        <Association Name="FK_dbo_CpeEntryDataPointValues_dbo_DataPointDefinitions_DataPointDefinitionId">
+          <End Role="DataPointDefinitions" Type="Self.DataPointDefinition" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CpeEntryDataPointValues" Type="Self.CpeEntryDataPointValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DataPointDefinitions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CpeEntryDataPointValues">
+              <PropertyRef Name="DataPointDefinitionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="cpe_devEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CpeEntryDataPointValues" EntityType="Self.CpeEntryDataPointValue" />
+          <EntitySet Name="DataPointDefinitions" EntityType="Self.DataPointDefinition" />
+          <AssociationSet Name="FK_dbo_CpeEntryDataPointValues_dbo_DataPointDefinitions_DataPointDefinitionId" Association="Self.FK_dbo_CpeEntryDataPointValues_dbo_DataPointDefinitions_DataPointDefinitionId">
+            <End Role="DataPointDefinitions" EntitySet="DataPointDefinitions" />
+            <End Role="CpeEntryDataPointValues" EntitySet="CpeEntryDataPointValues" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="cpe_devModelStoreContainer" CdmEntityContainer="cpe_devEntities">
+          <EntitySetMapping Name="CpeEntryDataPointValues">
+            <EntityTypeMapping TypeName="cpe_devModel.CpeEntryDataPointValue">
+              <MappingFragment StoreEntitySet="CpeEntryDataPointValues">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DataPointDefinitionId" ColumnName="DataPointDefinitionId" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="IsBlobValue" ColumnName="IsBlobValue" />
+                <ScalarProperty Name="BlobValue" ColumnName="BlobValue" />
+                <ScalarProperty Name="BlobFileName" ColumnName="BlobFileName" />
+                <ScalarProperty Name="CpeDefinitionId" ColumnName="CpeDefinitionId" />
+                <ScalarProperty Name="CPEEntryId" ColumnName="CPEEntryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DataPointDefinitions">
+            <EntityTypeMapping TypeName="cpe_devModel.DataPointDefinition">
+              <MappingFragment StoreEntitySet="DataPointDefinitions">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="SequenceNumber" ColumnName="SequenceNumber" />
+                <ScalarProperty Name="CpeDefinitionId" ColumnName="CpeDefinitionId" />
+                <ScalarProperty Name="DataSetDefinitionId" ColumnName="DataSetDefinitionId" />
+                <ScalarProperty Name="DataTypeId" ColumnName="DataTypeId" />
+                <ScalarProperty Name="IsCalculated" ColumnName="IsCalculated" />
+                <ScalarProperty Name="CalculationFunction" ColumnName="CalculationFunction" />
+                <ScalarProperty Name="IsConstantValue" ColumnName="IsConstantValue" />
+                <ScalarProperty Name="ConstantValue" ColumnName="ConstantValue" />
+                <ScalarProperty Name="DPShortName" ColumnName="DPShortName" />
+                <ScalarProperty Name="DataSetDisplayOptionsJson" ColumnName="DataSetDisplayOptionsJson" />
+                <ScalarProperty Name="VariantId" ColumnName="VariantId" />
+                <ScalarProperty Name="Minimum" ColumnName="Minimum" />
+                <ScalarProperty Name="Target" ColumnName="Target" />
+                <ScalarProperty Name="Maximum" ColumnName="Maximum" />
+                <ScalarProperty Name="IsRequired" ColumnName="IsRequired" />
+                <ScalarProperty Name="InputMask" ColumnName="InputMask" />
+                <ScalarProperty Name="InvalidMessage" ColumnName="InvalidMessage" />
+                <ScalarProperty Name="ValidateFunction" ColumnName="ValidateFunction" />
+                <ScalarProperty Name="TabIndex" ColumnName="TabIndex" />
+                <ScalarProperty Name="Range" ColumnName="Range" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
