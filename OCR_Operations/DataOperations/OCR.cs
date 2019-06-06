@@ -69,7 +69,11 @@ namespace OCR_Operations.DataOperations
                         new MediaTypeHeaderValue("application/octet-stream");
 
                     // Asynchronously call the REST API method.
-                    response = await client.PostAsync(uri, content);
+                    //response = await client.PostAsync(uri, content);
+                    using(var resp = client.PostAsync(uri, content).Result)
+                    {
+                        response = resp;
+                    }
                 }
                 // The response header for the Batch Read method contains the URI
                 // of the second method, Read Operation Result, which
@@ -98,8 +102,8 @@ namespace OCR_Operations.DataOperations
                 do
                 {
                     System.Threading.Thread.Sleep(1000);
-                    response = await client.GetAsync(operationLocation);
-                    contentString = await response.Content.ReadAsStringAsync();
+                    response = client.GetAsync(operationLocation).Result;
+                    contentString = response.Content.ReadAsStringAsync().Result;
                     ++i;
                 }
                 while (i < timeOut && contentString.IndexOf("\"status\":\"Succeeded\"") == -1);
