@@ -14,6 +14,7 @@ namespace PnG_Cpe_OCR.Controllers
     public class ValuesController : ApiController
     {
         // POST api/values
+        [HttpPost]
         public async Task<HttpResponseMessage> Post()
         {
             if (!Request.Content.IsMimeMultipartContent())
