@@ -23,6 +23,9 @@ namespace OCR_Operations
                 extractData.OCRText = ocrText;
                 switch (cpeDefinitionId)
                 {
+                    case 17:
+                        success = extractData.Yankee_Hood_Gap(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 27:
                         success = extractData.Glue_Turret_Data(cpeEntryId, cpeDefinitionId);
                         break;
