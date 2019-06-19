@@ -10,6 +10,41 @@ namespace OCR_Operations.DataOperations
 {
     partial class ExtractData
     {
+        private string GetTargetValue(string label, int value_length)
+        {
+            int index_Of_Field = OCRText.IndexOf(label);
+            int countOfField = label.Length;
+            while (index_Of_Field == -1)
+            {
+                label = label.Remove(countOfField - 1, 1);
+                countOfField = label.Length;
+                index_Of_Field = OCRText.IndexOf(label);
+                if (countOfField <= 0)
+                {
+                    return ErrorText;
+                }
+            }
+            string value = OCRText.Substring(OCRText.IndexOf("\r\n", (index_Of_Field + countOfField + 2)) + 2, value_length); // add +2 for /r/n characters
+            return value;
+        }
+        private string GetMeasurementValue(string label, int value_length)
+        {
+            int index_Of_Field = OCRText.IndexOf(label);
+            int countOfField = label.Length;
+            while (index_Of_Field == -1)
+            {
+                label = label.Remove(countOfField - 1, 1);
+                countOfField = label.Length;
+                index_Of_Field = OCRText.IndexOf(label);
+                //Error Handle if label not exist 
+                if (countOfField <= 0)
+                {
+                    return ErrorText;
+                }
+            }
+            string value = OCRText.Substring(index_Of_Field + countOfField + 2, value_length); // add +2 for /r/n characters
+            return value;
+        }
         private string RemoveError_GlueTurret(string value)
         {
             if (value.ToUpper().Contains("YES"))
@@ -106,18 +141,6 @@ namespace OCR_Operations.DataOperations
             }
             //Insert list of cpeentrydatapointvalues in to database using datainsertion class
             bool success = dataInsertion.Insert(cpeDataList);
-            //Set Glue Turret Object Values
-            //cpe_Glue_Turret.MD_Angel = Convert.ToDecimal(RemoveError_GlueTurret(GetFieldValue(md_Angel_Label, md_Angel_Value_Length)));
-            //cpe_Glue_Turret.CD_Angel_Start = Convert.ToDecimal(RemoveError_GlueTurret(GetFieldValue(cd_Angel_Start_Label, cd_Angel_Start_Value_Length)));
-            //cpe_Glue_Turret.CD_Angel_Stop = Convert.ToDecimal(RemoveError_GlueTurret(GetFieldValue(cd_Angel_Stop_Label, cd_Angel_Stop_Value_Length)));
-            //cpe_Glue_Turret.Traverse_Time = Convert.ToDecimal(RemoveError_GlueTurret(GetFieldValue(traverse_Time_Label, traverse_Time_Value_Length)));
-            //cpe_Glue_Turret.Speed = Convert.ToDecimal(RemoveError_GlueTurret(GetFieldValue(speed_Label, speed_Value_Length)));
-            //cpe_Glue_Turret.Is_Spray_Hit = RemoveError_GlueTurret(GetFieldValue(is_Spray_Hit_Label, spray_Hit_Length));
-            //cpe_Glue_Turret.Is_Start_Distance_2 = RemoveError_GlueTurret(GetFieldValue(is_Start_Distance_Label, start_Distance_Length));
-            //cpe_Glue_Turret.Is_Stop_Distance_2 = RemoveError_GlueTurret(GetFieldValue(is_Stop_Distance_Label, stop_Distance_Length));
-
-            //to print indexes of values
-            //Console.WriteLine($"MD_Angel value {cpe_Glue_Turret.MD_Angel}\nCD_Angel_start value {cpe_Glue_Turret.CD_Angel_Start}\nCD_Angel_Stop value {cpe_Glue_Turret.CD_Angel_Stop}\n Traverse_Time value {cpe_Glue_Turret.Traverse_Time}\nSpeed value {cpe_Glue_Turret.Speed}\nSpray Hit {cpe_Glue_Turret.Is_Spray_Hit}\n Start Distance {cpe_Glue_Turret.Is_Start_Distance_2}\n Stop Distance {cpe_Glue_Turret.Is_Stop_Distance_2}");
             return success;
         }
     }
