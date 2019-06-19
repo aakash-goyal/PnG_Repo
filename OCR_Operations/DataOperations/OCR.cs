@@ -85,7 +85,7 @@ namespace OCR_Operations.DataOperations
                 else
                 {
                     // Display the JSON error data.
-                    string errorString = await response.Content.ReadAsStringAsync();
+                    string errorString = response.Content.ReadAsStringAsync().Result;
                     return new JObject(new JProperty("Error", JToken.Parse(errorString).ToString()));
                 }
                 // If the first REST API method completes successfully, the second 

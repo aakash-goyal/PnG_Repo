@@ -76,7 +76,7 @@ namespace PnG_Cpe_OCR.Controllers
                 }
                 if (cpeEntryId == 0 || cpeDefinitionId == 0 || filePath == "")
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.NotImplemented, new Exception("Invalid Data"));
+                    return Request.CreateErrorResponse(HttpStatusCode.OK, new Exception("Invalid Data"));
                 }
                 OcrProgram ocrProgram = new OcrProgram();
                 bool success = ocrProgram.InsertFileData(cpeEntryId, cpeDefinitionId, filePath);
@@ -86,7 +86,7 @@ namespace PnG_Cpe_OCR.Controllers
                 }
                 else
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.NotImplemented, new Exception("Data Not Inserted"));
+                    return Request.CreateErrorResponse(HttpStatusCode.OK, new Exception("Data Not Inserted"));
                 }
             }
             catch (System.Exception e)
