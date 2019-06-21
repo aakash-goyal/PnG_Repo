@@ -14,7 +14,12 @@ namespace OCR_Operations.DataOperations
             bool success = true;
             cpe_devEntities db = new cpe_devEntities();
 
-            foreach(var cpeEntryDataPintValue in cpeEntryDataPointValues)
+            if (cpeEntryDataPointValues.Count == 0)               // If No data is extracted
+            {
+                return success;                          
+            }
+
+            foreach (var cpeEntryDataPintValue in cpeEntryDataPointValues)
             {
                 db.CpeEntryDataPointValues.Add(cpeEntryDataPintValue);
             }

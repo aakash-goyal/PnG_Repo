@@ -77,6 +77,10 @@
     <Compile Include="DataOperations\DataInsertion.cs" />
     <Compile Include="DataOperations\ExtractData.cs" />
     <Compile Include="DataOperations\Extract_Glue_Turret_Data.cs" />
+    <Compile Include="DataOperations\Extract_Wirebox_Ver2_Data.cs" />
+    <Compile Include="DataOperations\Extract_WireSection_Shower_Data.cs" />
+    <Compile Include="DataOperations\Extract_Yankee_Doctor_Blade_Data.cs" />
+    <Compile Include="DataOperations\Extract_Yankee_Hood_Gap_Data.cs" />
     <Compile Include="DataOperations\OCR.cs" />
     <Compile Include="OcrProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

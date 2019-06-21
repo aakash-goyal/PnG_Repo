@@ -27,24 +27,6 @@ namespace OCR_Operations.DataOperations
             string value = OCRText.Substring(OCRText.IndexOf("\r\n", (index_Of_Field + countOfField + 2)) + 2, value_length); // add +2 for /r/n characters
             return value;
         }
-        private string GetMeasurementValue(string label, int value_length)
-        {
-            int index_Of_Field = OCRText.IndexOf(label);
-            int countOfField = label.Length;
-            while (index_Of_Field == -1)
-            {
-                label = label.Remove(countOfField - 1, 1);
-                countOfField = label.Length;
-                index_Of_Field = OCRText.IndexOf(label);
-                //Error Handle if label not exist 
-                if (countOfField <= 0)
-                {
-                    return ErrorText;
-                }
-            }
-            string value = OCRText.Substring(index_Of_Field + countOfField + 2, value_length); // add +2 for /r/n characters
-            return value;
-        }
         private string RemoveError_GlueTurret(string value)
         {
             if (value.ToUpper().Contains("YES"))
@@ -75,7 +57,7 @@ namespace OCR_Operations.DataOperations
                 // If value doesn't match then return blank
                 if(value.Length == 0)
                 {
-                    return "";
+                    return "";                                   //If value not a number
                 }
                 value = value.Remove((value.Length - 1), 1);
                 match = regex.Match(value);
