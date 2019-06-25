@@ -20,7 +20,7 @@ namespace OCR_Operations.DataOperations
                 countOfField = label.Length;
                 index_Of_Field = OCRText.IndexOf(label);
                 //Error Handle if label not exist 
-                if (countOfField <= 0)
+                if (countOfField <= 2)
                 {
                     return -1;        //If label not found
                 }
@@ -48,7 +48,10 @@ namespace OCR_Operations.DataOperations
             {//OCRText.IndexOf("\r\n", (index_Of_Field + countOfField + 2))
                 startIndex = OCRText.IndexOf("\r\n", startIndex) + 2;
             }
-
+            if (startIndex == countOfField + 1)
+            {
+                return "";
+            }
             string value = OCRText.Substring(startIndex, value_length); // add +2 for /r/n characters
             return value;
         }

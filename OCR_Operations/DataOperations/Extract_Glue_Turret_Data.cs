@@ -19,7 +19,7 @@ namespace OCR_Operations.DataOperations
                 label = label.Remove(countOfField - 1, 1);
                 countOfField = label.Length;
                 index_Of_Field = OCRText.IndexOf(label);
-                if (countOfField <= 0)
+                if (countOfField <= 2)
                 {
                     return ErrorText;
                 }

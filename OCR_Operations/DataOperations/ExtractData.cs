@@ -30,7 +30,7 @@ namespace OCR_Operations.DataOperations
                 countOfField = label.Length;
                 index_Of_Field = OCRText.IndexOf(label);
                 //Error Handle if label not exist 
-                if (countOfField <= 0)
+                if (countOfField <= 2)
                 {
                     return ErrorText;
                 }

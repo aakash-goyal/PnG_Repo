@@ -28,17 +28,29 @@ namespace OCR_Operations
                     case 1:
                         success = extractData.Yankee_Doctor_Blade(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 6:
+                        success = extractData.VSI(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 17:
                         success = extractData.Yankee_Hood_Gap(cpeEntryId, cpeDefinitionId);
                         break;
                     case 27:
                         success = extractData.Glue_Turret_Data(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 28:
+                        success = extractData.Spool_Spinner(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 32:
                         success = extractData.Wirebox_Ver2(cpeEntryId, cpeDefinitionId);
                         break;
                     case 34:
                         success = extractData.Wire_Section_Shower(cpeEntryId, cpeDefinitionId);
+                        break;
+                    case 48:
+                        success = extractData.Wire_Edge_Trim(cpeEntryId, cpeDefinitionId);
+                        break;
+                    case 112:
+                        success = extractData.Steam_Hood_Geometry(cpeEntryId, cpeDefinitionId);
                         break;
                     default:
                         success = false;                                     //if wrong definitionId is given
