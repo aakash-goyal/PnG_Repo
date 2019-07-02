@@ -20,6 +20,25 @@ namespace OCR_Operations.DataOperations
                           select dataPoint;
             return dataset.ToList();
         }
+        private CpeEntryDataPointValue CreateCpeEntryDataPoint(string value, int dataPointId, int cpeDefinitionId, int cpeEntryId)
+        {
+            //If value is not found then assign null to value
+            if (value.Equals(ErrorText))
+            {
+                value = "";
+            }
+            //to handle possible common errors in Values
+            // Create CpeEntryDataPoint object with the values obtained
+            CpeEntryDataPointValue cpeEntryDataPointValue = new CpeEntryDataPointValue
+            {
+                DataPointDefinitionId = dataPointId,
+                Value = value,
+                IsBlobValue = false,  // Not saving any file for now
+                CpeDefinitionId = cpeDefinitionId,
+                CPEEntryId = cpeEntryId
+            };
+            return cpeEntryDataPointValue;
+        }
         private string GetMeasurementValue(string label, int value_length)
         {
             int index_Of_Field = OCRText.IndexOf(label);

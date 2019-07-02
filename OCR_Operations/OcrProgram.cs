@@ -11,6 +11,7 @@ namespace OCR_Operations
 {
     public class OcrProgram
     {
+
         public bool InsertFileData(int cpeEntryId, int cpeDefinitionId, string filePath)
         {
             bool success;
@@ -27,6 +28,9 @@ namespace OCR_Operations
                 {
                     case 1:
                         success = extractData.Yankee_Doctor_Blade(cpeEntryId, cpeDefinitionId);
+                        break;
+                    case 3:
+                        success = extractData.Refiner_Mechanical_Inspection(cpeEntryId, cpeDefinitionId);
                         break;
                     case 6:
                         success = extractData.VSI(cpeEntryId, cpeDefinitionId);
@@ -46,11 +50,20 @@ namespace OCR_Operations
                     case 34:
                         success = extractData.Wire_Section_Shower(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 45:
+                        success = extractData.Refiner_Plate_Inspection(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 48:
                         success = extractData.Wire_Edge_Trim(cpeEntryId, cpeDefinitionId);
                         break;
                     case 112:
                         success = extractData.Steam_Hood_Geometry(cpeEntryId, cpeDefinitionId);
+                        break;
+                    case 116:
+                        success = extractData.Slice_Opening_Profile(cpeEntryId, cpeDefinitionId);
+                        break;
+                    case 120:
+                        success = extractData.Refiner_Curve(cpeEntryId, cpeDefinitionId);
                         break;
                     default:
                         success = false;                                     //if wrong definitionId is given

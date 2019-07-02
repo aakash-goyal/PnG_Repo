@@ -77,6 +77,10 @@
     <Compile Include="DataOperations\DataInsertion.cs" />
     <Compile Include="DataOperations\ExtractData.cs" />
     <Compile Include="DataOperations\Extract_Glue_Turret_Data.cs" />
+    <Compile Include="DataOperations\Extract_Refiner_Curve_Data.cs" />
+    <Compile Include="DataOperations\Extract_Refiner_Mechanical_Inspection_Data.cs" />
+    <Compile Include="DataOperations\Extract_Refiner_Plate_Inspection_Data.cs" />
+    <Compile Include="DataOperations\Extract_Slice_Opening_Profile_Data.cs" />
     <Compile Include="DataOperations\Extract_Spool_Spinner_Data.cs" />
     <Compile Include="DataOperations\Extract_Steam_Hood_Geometry_Data.cs" />
     <Compile Include="DataOperations\Extract_VSI_Data.cs" />
