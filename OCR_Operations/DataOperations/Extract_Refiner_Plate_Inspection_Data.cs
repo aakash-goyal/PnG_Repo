@@ -30,9 +30,13 @@ namespace OCR_Operations.DataOperations
             for (int i = 1; i < slotNumber; i++)
             {//OCRText.IndexOf("\r\n", (index_Of_Field + countOfField + 2))
                 startIndex = OCRText.IndexOf("\r\n", startIndex) + 2; // add +2 for /r/n characters
+                if (startIndex == 1 || startIndex >= OCRText.Length)
+                {
+                    return ErrorText;
+                }
             }
             int lastIndex = OCRText.IndexOf("\r\n", startIndex);
-            if (startIndex == countOfField + 1 || startIndex >= OCRText.Length)
+            if (startIndex == 1 || startIndex >= OCRText.Length)
             {
                 return ErrorText;
             }
@@ -61,7 +65,7 @@ namespace OCR_Operations.DataOperations
             }
             int startIndex = OCRText.IndexOf("\r\n", index_Of_Field) + 2;
             int lastIndex = OCRText.IndexOf("\r\n", startIndex);
-            if (startIndex == countOfField + 1 || startIndex >= OCRText.Length)
+            if (startIndex == 1 || startIndex >= OCRText.Length)
             {
                 return ErrorText;
             }

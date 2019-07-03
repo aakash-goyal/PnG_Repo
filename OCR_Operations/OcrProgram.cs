@@ -65,6 +65,9 @@ namespace OCR_Operations
                     case 120:
                         success = extractData.Refiner_Curve(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 122:
+                        success = extractData.Pulper_Curve(cpeEntryId, cpeDefinitionId);
+                        break;
                     default:
                         success = false;                                     //if wrong definitionId is given
                         break;
