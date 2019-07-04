@@ -78,6 +78,7 @@
     <Compile Include="DataOperations\ExtractData.cs" />
     <Compile Include="DataOperations\Extract_Glue_Turret_Data.cs" />
     <Compile Include="DataOperations\Extract_Pulper_Curve_Data.cs" />
+    <Compile Include="DataOperations\Extract_Pulper_Repulper_Data.cs" />
     <Compile Include="DataOperations\Extract_Refiner_Curve_Data.cs" />
     <Compile Include="DataOperations\Extract_Refiner_Mechanical_Inspection_Data.cs" />
     <Compile Include="DataOperations\Extract_Refiner_Plate_Inspection_Data.cs" />

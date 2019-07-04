@@ -35,6 +35,9 @@ namespace OCR_Operations
                     case 6:
                         success = extractData.VSI(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 9:
+                        success = extractData.Pulper_Repulper(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 17:
                         success = extractData.Yankee_Hood_Gap(cpeEntryId, cpeDefinitionId);
                         break;
