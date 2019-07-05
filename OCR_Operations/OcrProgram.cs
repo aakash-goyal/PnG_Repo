@@ -41,6 +41,9 @@ namespace OCR_Operations
                     case 17:
                         success = extractData.Yankee_Hood_Gap(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 19:
+                        success = extractData.Pressure_Screen(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 27:
                         success = extractData.Glue_Turret_Data(cpeEntryId, cpeDefinitionId);
                         break;
