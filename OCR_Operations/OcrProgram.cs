@@ -65,6 +65,9 @@ namespace OCR_Operations
                     case 112:
                         success = extractData.Steam_Hood_Geometry(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 113:
+                        success = extractData.PressureRoll_NipImpression(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 116:
                         success = extractData.Slice_Opening_Profile(cpeEntryId, cpeDefinitionId);
                         break;
