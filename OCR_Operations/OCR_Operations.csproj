@@ -77,6 +77,7 @@
     <Compile Include="DataOperations\DataInsertion.cs" />
     <Compile Include="DataOperations\ExtractData.cs" />
     <Compile Include="DataOperations\Extract_Glue_Turret_Data.cs" />
+    <Compile Include="DataOperations\Extract_PressureRoll_AirBag_Data.cs" />
     <Compile Include="DataOperations\Extract_PressureRoll_NipImpression_Data.cs" />
     <Compile Include="DataOperations\Extract_Pulper_Curve_Data.cs" />
     <Compile Include="DataOperations\Extract_Pulper_Repulper_Data.cs" />

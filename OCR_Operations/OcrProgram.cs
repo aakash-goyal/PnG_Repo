@@ -71,6 +71,9 @@ namespace OCR_Operations
                     case 116:
                         success = extractData.Slice_Opening_Profile(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 118:
+                        success = extractData.PressureRoll_AirBag(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 120:
                         success = extractData.Refiner_Curve(cpeEntryId, cpeDefinitionId);
                         break;
