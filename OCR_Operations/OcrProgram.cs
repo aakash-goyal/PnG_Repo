@@ -56,6 +56,9 @@ namespace OCR_Operations
                     case 34:
                         success = extractData.Wire_Section_Shower(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 39:
+                        success = extractData.PressSection_Shower(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 45:
                         success = extractData.Refiner_Plate_Inspection(cpeEntryId, cpeDefinitionId);
                         break;
