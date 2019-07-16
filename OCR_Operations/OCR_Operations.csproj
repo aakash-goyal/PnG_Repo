@@ -77,6 +77,11 @@
     <Compile Include="DataOperations\DataInsertion.cs" />
     <Compile Include="DataOperations\ExtractData.cs" />
     <Compile Include="DataOperations\Extract_Glue_Turret_Data.cs" />
+    <Compile Include="DataOperations\Extract_Hydrofoil_Data.cs" />
+    <Compile Include="DataOperations\Extract_LFSR_Shower_Data.cs" />
+    <Compile Include="DataOperations\Extract_LSFR_SoftDoctor_Data.cs" />
+    <Compile Include="DataOperations\Extract_MSVB_Data.cs" />
+    <Compile Include="DataOperations\Extract_MtHopeRoll_Press_Data.cs" />
     <Compile Include="DataOperations\Extract_PressSection_Shower_Data.cs" />
     <Compile Include="DataOperations\Extract_PressureRoll_AirBag_Data.cs" />
     <Compile Include="DataOperations\Extract_PressureRoll_NipImpression_Data.cs" />

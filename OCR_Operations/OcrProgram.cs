@@ -38,6 +38,12 @@ namespace OCR_Operations
                     case 9:
                         success = extractData.Pulper_Repulper(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 12:
+                        success = extractData.LFSR_SoftDoctor(cpeEntryId, cpeDefinitionId);
+                        break;
+                    case 13:
+                        success = extractData.LFSR_Shower(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 17:
                         success = extractData.Yankee_Hood_Gap(cpeEntryId, cpeDefinitionId);
                         break;
@@ -59,8 +65,14 @@ namespace OCR_Operations
                     case 39:
                         success = extractData.PressSection_Shower(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 40:
+                        success = extractData.MSVB(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 45:
                         success = extractData.Refiner_Plate_Inspection(cpeEntryId, cpeDefinitionId);
+                        break;
+                    case 46:
+                        success = extractData.MtHopeRoll_Press(cpeEntryId, cpeDefinitionId);
                         break;
                     case 48:
                         success = extractData.Wire_Edge_Trim(cpeEntryId, cpeDefinitionId);
@@ -70,6 +82,9 @@ namespace OCR_Operations
                         break;
                     case 113:
                         success = extractData.PressureRoll_NipImpression(cpeEntryId, cpeDefinitionId);
+                        break;
+                    case 114:
+                        success = extractData.Hydrofoil(cpeEntryId, cpeDefinitionId);
                         break;
                     case 116:
                         success = extractData.Slice_Opening_Profile(cpeEntryId, cpeDefinitionId);

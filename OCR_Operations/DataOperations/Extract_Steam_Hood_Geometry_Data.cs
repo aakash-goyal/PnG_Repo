@@ -10,38 +10,28 @@ namespace OCR_Operations.DataOperations
 {
     partial class ExtractData
     {
-        private string GetDefectLabeledValues(string label, int defectNumber, int limitIndex)
+        private int GetFrontLabelIndex_SteamHood(string label, int slotNumber, int labelIndex)
         {
-            int index_Of_Field = OCRText.IndexOf(label);
-            int countOfField = label.Length;
-            while (index_Of_Field == -1)
+            int index_Of_Field = labelIndex, countOfField = 0;
+            for (int i = 1; i <= slotNumber; i++)
             {
-                label = label.Remove(countOfField - 1, 1);
+                index_Of_Field = OCRText.IndexOf(label, index_Of_Field);
                 countOfField = label.Length;
-                index_Of_Field = OCRText.IndexOf(label);
-                //Error Handle if label not exist 
-                if (countOfField <= 2)
+                while (index_Of_Field == -1)
                 {
-                    return ErrorText;
+                    label = label.Remove(0, 1);
+                    countOfField = label.Length;
+                    index_Of_Field = OCRText.IndexOf(label, index_Of_Field);
+                    //Error Handle if label not exist 
+                    if (countOfField <= 4)
+                    {
+                        return -1;        //If label not found
+                    }
                 }
+                index_Of_Field += countOfField;
             }
-            int startIndex = index_Of_Field + countOfField + 2;
 
-            for (int i = 1; i < defectNumber; i++)
-            {//OCRText.IndexOf("\r\n", (index_Of_Field + countOfField + 2))
-                startIndex = OCRText.IndexOf("\r\n", startIndex) + 2;
-            }
-            int lastIndex = OCRText.IndexOf("\r\n", startIndex);
-            if (startIndex != countOfField + 1 && startIndex < limitIndex)
-            {
-                int value_length = lastIndex - startIndex;
-                string value = OCRText.Substring(startIndex, value_length); // add +2 for /r/n characters
-                return value;
-            }
-            else
-            {
-                return "";               // If defect content is not available
-            }
+            return index_Of_Field - countOfField;
         }
         private string RemoveGeneralError_SteamHood(string value)
         {
@@ -53,10 +43,6 @@ namespace OCR_Operations.DataOperations
             else if (value.Contains("-") && value.IndexOf("-") > 2)
             {
                 value = value.Replace("-", ".");
-            }
-            if (value.Contains("+"))
-            {
-                value = value.Replace("+", "").Replace("-", "").Replace("/", "");
             }
             //Pattern to match decimal number
             string decimal_Pattern = @"^[0-9]*(\.\d{1,3})?$";
@@ -79,72 +65,63 @@ namespace OCR_Operations.DataOperations
         {
             DataInsertion dataInsertion = new DataInsertion();
             List<CpeEntryDataPointValue> cpeDataList = new List<CpeEntryDataPointValue>();
-            int value_Length;                                                               //  Expected Length of values
             string value_Label;
             string value;
             List<DataPointDefinition> dataPointDefinitions = GetDataPointDefinitions(cpeDefinitionId);
+            OCRText = OCRText.Replace("LEADING EDGE\r\n", "").Replace("TRAILING EDGE\r\n", "");
 
             foreach (var dataPointDefinition in dataPointDefinitions)
             {
-                value_Length = 6;
+                int labelIndex = GetFrontLabelIndex_SlotWise("STEAM HOOD", 2);
                 int slotNumber = 0;
-                if (dataPointDefinition.DataSetDefinitionId == 382)
+                int labelSlotNumber = 0;
+                value_Label = "DISTANCE TO WIRE";
+                if (dataPointDefinition.DataSetDefinitionId == 381)
                 {
-                    value_Label = "Location";
-                    int limitIndex = GetLabelIndex("STEAM HOOD");
-                    if (dataPointDefinition.Title.Contains("Defects 1"))
+                    if (dataPointDefinition.Title.Contains("DS Trailing Edge"))
                     {
-                        slotNumber = 1;
-                        value = GetDefectLabeledValues(value_Label, slotNumber, limitIndex);
+                        labelSlotNumber = 4;
                     }
-                    else if (dataPointDefinition.Title.Contains("Location & Description 1"))
+                    else if (dataPointDefinition.Title.Contains("DS Leading Edge"))
                     {
-                        value = GetDefectLabeledValues(value_Label, 3, limitIndex);
-                        value += GetDefectLabeledValues(value_Label, 2, limitIndex);
+                        labelSlotNumber = 3;
                     }
-                    else if (dataPointDefinition.Title.Contains("Defects 2"))
+                    else if (dataPointDefinition.Title.Contains("TS Trailing Edge"))
                     {
-                        slotNumber = 4;
-                        value = GetDefectLabeledValues(value_Label, slotNumber, limitIndex);
+                        labelSlotNumber = 2;
                     }
-                    else if (dataPointDefinition.Title.Contains("Location & Description 2"))
+                    else if (dataPointDefinition.Title.Contains("TS Leading Edge"))
                     {
-                        value = GetDefectLabeledValues(value_Label, 6, limitIndex);
-                        value += GetDefectLabeledValues(value_Label, 5, limitIndex);
+                        labelSlotNumber = 1;
                     }
-                    else
+                    if (labelSlotNumber == 0)
                     {
                         continue;
                     }
-                }
-                else if (dataPointDefinition.DataSetDefinitionId == 381)
-                {
                     if (dataPointDefinition.Title.Contains("- Target Hood Raised"))
                     {
-                        slotNumber = 4;
-                        value_Label = dataPointDefinition.Title.Replace(" - Target Hood Raised", "");
-                        value = GetSlotLabeledValues(value_Label, value_Length, slotNumber);
-                        value = RemoveGeneralError_SteamHood(value);
+                        value = "5";
+                    }
+                    else if (dataPointDefinition.Title.Contains("Range Hood Raised"))
+                    {
+                        value = "+/- 1/2";
                     }
                     else if (dataPointDefinition.Title.Contains("- Raised"))
                     {
-                        slotNumber = 3;
-                        value_Label = dataPointDefinition.Title.Replace(" - Raised", "");
-                        value = GetSlotLabeledValues(value_Label, value_Length, slotNumber);
+                        labelIndex = GetFrontLabelIndex_SteamHood("DISTANCE TO WIRE", labelSlotNumber, labelIndex);
+                        slotNumber = 2;                                                                           // As OCR not reading Target Hood Down value
+                        value = GetSlotFrontLabelValue_RefinerCurve(value_Label, slotNumber, labelIndex);
                         value = RemoveGeneralError_SteamHood(value);
                     }
                     else if (dataPointDefinition.Title.Contains("Target Hood Down"))
                     {
-                        slotNumber = 2;
-                        value_Label = dataPointDefinition.Title.Replace(" - Target Hood Down", "");
-                        value = GetSlotLabeledValues(value_Label, value_Length, slotNumber);
-                        value = RemoveGeneralError_SteamHood(value);
+                        value = "1";
                     }
                     else if (dataPointDefinition.Title.Contains("Distance Down"))
                     {
+                        labelIndex = GetFrontLabelIndex_SteamHood("DISTANCE TO WIRE", labelSlotNumber, labelIndex);
                         slotNumber = 1;
-                        value_Label = dataPointDefinition.Title.Replace(" - Distance Down", "");
-                        value = GetSlotLabeledValues(value_Label, value_Length, slotNumber);
+                        value = GetSlotFrontLabelValue_RefinerCurve(value_Label, slotNumber, labelIndex);
                         value = RemoveGeneralError_SteamHood(value);
                     }
                     else
@@ -156,22 +133,8 @@ namespace OCR_Operations.DataOperations
                 {
                     continue;
                 }
-                //If value is not found then assign null to value
-                if (value.Equals(ErrorText))
-                {
-                    value = "";
-                }                              //to handle possible common errors in Values
-                                               // Create CpeEntryDataPoint object with the values obtained
-                CpeEntryDataPointValue cpeEntryDataPointValue = new CpeEntryDataPointValue
-                {
-                    DataPointDefinitionId = dataPointDefinition.Id,
-                    Value = value,
-                    IsBlobValue = false,  // Not saving any file for now
-                    CpeDefinitionId = cpeDefinitionId,
-                    CPEEntryId = cpeEntryId
-                };
                 // Add new Object to list
-                cpeDataList.Add(cpeEntryDataPointValue);
+                cpeDataList.Add(CreateCpeEntryDataPoint(value, dataPointDefinition.Id, cpeDefinitionId, cpeEntryId));
             }
             //Insert list of cpeentrydatapointvalues in to database using datainsertion class
             bool success = dataInsertion.Insert(cpeDataList);
