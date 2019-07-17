@@ -98,13 +98,9 @@ namespace OCR_Operations.DataOperations
                     {
                         continue;
                     }
-                    if (dataPointDefinition.Title.Contains("- Target Hood Raised"))
+                    if (dataPointDefinition.IsConstantValue == 1)
                     {
-                        value = "5";
-                    }
-                    else if (dataPointDefinition.Title.Contains("Range Hood Raised"))
-                    {
-                        value = "+/- 1/2";
+                        value = dataPointDefinition.ConstantValue;
                     }
                     else if (dataPointDefinition.Title.Contains("- Raised"))
                     {
@@ -112,10 +108,6 @@ namespace OCR_Operations.DataOperations
                         slotNumber = 2;                                                                           // As OCR not reading Target Hood Down value
                         value = GetSlotFrontLabelValue_RefinerCurve(value_Label, slotNumber, labelIndex);
                         value = RemoveGeneralError_SteamHood(value);
-                    }
-                    else if (dataPointDefinition.Title.Contains("Target Hood Down"))
-                    {
-                        value = "1";
                     }
                     else if (dataPointDefinition.Title.Contains("Distance Down"))
                     {

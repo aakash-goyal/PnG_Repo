@@ -50,6 +50,12 @@ namespace OCR_Operations
                     case 19:
                         success = extractData.Pressure_Screen(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 21:
+                        success = extractData.Headbox_JetImpingement(cpeEntryId, cpeDefinitionId);
+                        break;
+                    case 23:
+                        success = extractData.Headbox_Vane(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 27:
                         success = extractData.Glue_Turret_Data(cpeEntryId, cpeDefinitionId);
                         break;
