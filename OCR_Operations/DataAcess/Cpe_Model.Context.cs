@@ -13,10 +13,10 @@ namespace OCR_Operations.DataAcess
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class cpe_devEntities : DbContext
+    public partial class cpe_devEntities1 : DbContext
     {
-        public cpe_devEntities()
-            : base("name=cpe_devEntities")
+        public cpe_devEntities1()
+            : base("name=cpe_devEntities1")
         {
         }
     
@@ -25,6 +25,7 @@ namespace OCR_Operations.DataAcess
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<CpeEntry> CpeEntries { get; set; }
         public virtual DbSet<CpeEntryDataPointValue> CpeEntryDataPointValues { get; set; }
         public virtual DbSet<DataPointDefinition> DataPointDefinitions { get; set; }
     }

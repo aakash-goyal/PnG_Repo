@@ -4,9 +4,11 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="1253fc4f5f2d4b6c86c4153de7c9b667" Name="Diagram1">
-        <EntityTypeShape EntityType="cpe_devModel.CpeEntryDataPointValue" Width="1.5" PointX="3" PointY="2.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="cpe_devModel.DataPointDefinition" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
+      <Diagram DiagramId="3920c2b7f43d4b53934db01f54f02e59" Name="Diagram1">
+        <EntityTypeShape EntityType="cpe_devModel.CpeEntry" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="cpe_devModel.CpeEntryDataPointValue" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="cpe_devModel.DataPointDefinition" Width="1.5" PointX="6.5" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="cpe_devModel.FK_dbo_CpeEntryDataPointValues_dbo_CpeEntries_CPEEntryId" ManuallyRouted="false" />
         <AssociationConnector Association="cpe_devModel.FK_dbo_CpeEntryDataPointValues_dbo_DataPointDefinitions_DataPointDefinitionId" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>

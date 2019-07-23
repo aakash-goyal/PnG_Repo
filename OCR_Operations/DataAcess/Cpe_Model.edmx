@@ -5,6 +5,23 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="cpe_devModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CpeEntries">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CpeDefinitionId" Type="int" />
+          <Property Name="CpeDefinitionVariantId" Type="int" />
+          <Property Name="DateEntered" Type="datetime" Nullable="false" />
+          <Property Name="PaperMachineId" Type="int" />
+          <Property Name="PrimaryBrandId" Type="int" />
+          <Property Name="InspectedBrandId" Type="int" />
+          <Property Name="InspectorName" Type="nvarchar(max)" />
+          <Property Name="ShortNote" Type="nvarchar(max)" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="InspectionDate" Type="datetime" />
+          <Property Name="LockingUserId" Type="int" />
+        </EntityType>
         <EntityType Name="CpeEntryDataPointValues">
           <Key>
             <PropertyRef Name="Id" />
@@ -45,6 +62,20 @@
           <Property Name="TabIndex" Type="int" />
           <Property Name="Range" Type="nvarchar(max)" />
         </EntityType>
+        <Association Name="FK_dbo_CpeEntryDataPointValues_dbo_CpeEntries_CPEEntryId">
+          <End Role="CpeEntries" Type="Self.CpeEntries" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CpeEntryDataPointValues" Type="Self.CpeEntryDataPointValues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CpeEntries">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CpeEntryDataPointValues">
+              <PropertyRef Name="CPEEntryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_CpeEntryDataPointValues_dbo_DataPointDefinitions_DataPointDefinitionId">
           <End Role="DataPointDefinitions" Type="Self.DataPointDefinitions" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -60,8 +91,13 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="cpe_devModelStoreContainer">
+          <EntitySet Name="CpeEntries" EntityType="Self.CpeEntries" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CpeEntryDataPointValues" EntityType="Self.CpeEntryDataPointValues" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DataPointDefinitions" EntityType="Self.DataPointDefinitions" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_CpeEntryDataPointValues_dbo_CpeEntries_CPEEntryId" Association="Self.FK_dbo_CpeEntryDataPointValues_dbo_CpeEntries_CPEEntryId">
+            <End Role="CpeEntries" EntitySet="CpeEntries" />
+            <End Role="CpeEntryDataPointValues" EntitySet="CpeEntryDataPointValues" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_CpeEntryDataPointValues_dbo_DataPointDefinitions_DataPointDefinitionId" Association="Self.FK_dbo_CpeEntryDataPointValues_dbo_DataPointDefinitions_DataPointDefinitionId">
             <End Role="DataPointDefinitions" EntitySet="DataPointDefinitions" />
             <End Role="CpeEntryDataPointValues" EntitySet="CpeEntryDataPointValues" />
@@ -72,6 +108,24 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="cpe_devModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CpeEntry">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CpeDefinitionId" Type="Int32" />
+          <Property Name="CpeDefinitionVariantId" Type="Int32" />
+          <Property Name="DateEntered" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PaperMachineId" Type="Int32" />
+          <Property Name="PrimaryBrandId" Type="Int32" />
+          <Property Name="InspectedBrandId" Type="Int32" />
+          <Property Name="InspectorName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShortNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="InspectionDate" Type="DateTime" Precision="3" />
+          <Property Name="LockingUserId" Type="Int32" />
+          <NavigationProperty Name="CpeEntryDataPointValues" Relationship="Self.FK_dbo_CpeEntryDataPointValues_dbo_CpeEntries_CPEEntryId" FromRole="CpeEntries" ToRole="CpeEntryDataPointValues" />
+        </EntityType>
         <EntityType Name="CpeEntryDataPointValue">
           <Key>
             <PropertyRef Name="Id" />
@@ -84,6 +138,7 @@
           <Property Name="BlobFileName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CpeDefinitionId" Type="Int32" />
           <Property Name="CPEEntryId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CpeEntry" Relationship="Self.FK_dbo_CpeEntryDataPointValues_dbo_CpeEntries_CPEEntryId" FromRole="CpeEntryDataPointValues" ToRole="CpeEntries" />
           <NavigationProperty Name="DataPointDefinition" Relationship="Self.FK_dbo_CpeEntryDataPointValues_dbo_DataPointDefinitions_DataPointDefinitionId" FromRole="CpeEntryDataPointValues" ToRole="DataPointDefinitions" />
         </EntityType>
         <EntityType Name="DataPointDefinition">
@@ -114,6 +169,20 @@
           <Property Name="Range" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CpeEntryDataPointValues" Relationship="Self.FK_dbo_CpeEntryDataPointValues_dbo_DataPointDefinitions_DataPointDefinitionId" FromRole="DataPointDefinitions" ToRole="CpeEntryDataPointValues" />
         </EntityType>
+        <Association Name="FK_dbo_CpeEntryDataPointValues_dbo_CpeEntries_CPEEntryId">
+          <End Role="CpeEntries" Type="Self.CpeEntry" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CpeEntryDataPointValues" Type="Self.CpeEntryDataPointValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CpeEntries">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CpeEntryDataPointValues">
+              <PropertyRef Name="CPEEntryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_CpeEntryDataPointValues_dbo_DataPointDefinitions_DataPointDefinitionId">
           <End Role="DataPointDefinitions" Type="Self.DataPointDefinition" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -128,9 +197,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="cpe_devEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="cpe_devEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CpeEntries" EntityType="Self.CpeEntry" />
           <EntitySet Name="CpeEntryDataPointValues" EntityType="Self.CpeEntryDataPointValue" />
           <EntitySet Name="DataPointDefinitions" EntityType="Self.DataPointDefinition" />
+          <AssociationSet Name="FK_dbo_CpeEntryDataPointValues_dbo_CpeEntries_CPEEntryId" Association="Self.FK_dbo_CpeEntryDataPointValues_dbo_CpeEntries_CPEEntryId">
+            <End Role="CpeEntries" EntitySet="CpeEntries" />
+            <End Role="CpeEntryDataPointValues" EntitySet="CpeEntryDataPointValues" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_CpeEntryDataPointValues_dbo_DataPointDefinitions_DataPointDefinitionId" Association="Self.FK_dbo_CpeEntryDataPointValues_dbo_DataPointDefinitions_DataPointDefinitionId">
             <End Role="DataPointDefinitions" EntitySet="DataPointDefinitions" />
             <End Role="CpeEntryDataPointValues" EntitySet="CpeEntryDataPointValues" />
@@ -141,7 +215,25 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="cpe_devModelStoreContainer" CdmEntityContainer="cpe_devEntities">
+        <EntityContainerMapping StorageEntityContainer="cpe_devModelStoreContainer" CdmEntityContainer="cpe_devEntities1">
+          <EntitySetMapping Name="CpeEntries">
+            <EntityTypeMapping TypeName="cpe_devModel.CpeEntry">
+              <MappingFragment StoreEntitySet="CpeEntries">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CpeDefinitionId" ColumnName="CpeDefinitionId" />
+                <ScalarProperty Name="CpeDefinitionVariantId" ColumnName="CpeDefinitionVariantId" />
+                <ScalarProperty Name="DateEntered" ColumnName="DateEntered" />
+                <ScalarProperty Name="PaperMachineId" ColumnName="PaperMachineId" />
+                <ScalarProperty Name="PrimaryBrandId" ColumnName="PrimaryBrandId" />
+                <ScalarProperty Name="InspectedBrandId" ColumnName="InspectedBrandId" />
+                <ScalarProperty Name="InspectorName" ColumnName="InspectorName" />
+                <ScalarProperty Name="ShortNote" ColumnName="ShortNote" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="InspectionDate" ColumnName="InspectionDate" />
+                <ScalarProperty Name="LockingUserId" ColumnName="LockingUserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="CpeEntryDataPointValues">
             <EntityTypeMapping TypeName="cpe_devModel.CpeEntryDataPointValue">
               <MappingFragment StoreEntitySet="CpeEntryDataPointValues">

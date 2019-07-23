@@ -55,7 +55,7 @@ namespace PnG_Cpe_OCR.Controllers
                 foreach (MultipartFileData file in provider.FileData)
                 {
                     FileInfo fileInfo = new FileInfo(file.LocalFileName);
-                    fileInfo.MoveTo(Path.ChangeExtension(file.LocalFileName, ".png"));
+                    fileInfo.MoveTo(Path.ChangeExtension(file.LocalFileName, ".pdf"));
                     filePath = fileInfo.FullName;
                 }
 

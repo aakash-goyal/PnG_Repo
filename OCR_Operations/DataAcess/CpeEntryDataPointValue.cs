@@ -23,6 +23,7 @@ namespace OCR_Operations.DataAcess
         public Nullable<int> CpeDefinitionId { get; set; }
         public int CPEEntryId { get; set; }
     
+        public virtual CpeEntry CpeEntry { get; set; }
         public virtual DataPointDefinition DataPointDefinition { get; set; }
     }
 }

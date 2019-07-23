@@ -12,11 +12,15 @@ namespace OCR_Operations.DataOperations
     {
         const string ErrorText = "Not Found";
         public string OCRText { get; set; }
-        private List<DataPointDefinition> GetDataPointDefinitions(int cpeDefId)
+        private List<DataPointDefinition> GetDataPointDefinitions(int cpeEntryId)
         {
-            var cpe_DevEntities = new cpe_devEntities();
+            var cpe_DevEntities = new cpe_devEntities1();
+            var cpeEntry = from cpedata in cpe_DevEntities.CpeEntries
+                           where cpedata.Id == cpeEntryId
+                           select cpedata;
+            var cpeEntrydata = cpeEntry.ToList().First();
             var dataset = from dataPoint in cpe_DevEntities.DataPointDefinitions
-                          where dataPoint.CpeDefinitionId == cpeDefId
+                          where (dataPoint.CpeDefinitionId == cpeEntrydata.CpeDefinitionId && (dataPoint.VariantId == cpeEntrydata.CpeDefinitionVariantId))
                           select dataPoint;
             return dataset.ToList();
         }

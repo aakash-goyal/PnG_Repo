@@ -25,7 +25,7 @@ namespace OCR_Operations.DataOperations
                     return ErrorText;
                 }
             }
-            int startIndex = OCRText.IndexOf("\r\n", index_Of_Field) + 2;
+            int startIndex = OCRText.IndexOf("\r\n", index_Of_Field + 1) + 2;  //To handle label with \r\n add 1
 
             for (int i = 1; i < slotNumber; i++)
             {//OCRText.IndexOf("\r\n", (index_Of_Field + countOfField + 2))

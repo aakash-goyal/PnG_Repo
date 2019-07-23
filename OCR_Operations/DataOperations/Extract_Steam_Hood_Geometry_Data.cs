@@ -12,16 +12,16 @@ namespace OCR_Operations.DataOperations
     {
         private int GetFrontLabelIndex_SteamHood(string label, int slotNumber, int labelIndex)
         {
-            int index_Of_Field = labelIndex, countOfField = 0;
+            int index_Of_Field = labelIndex, countOfField = 0, index = labelIndex;
             for (int i = 1; i <= slotNumber; i++)
             {
-                index_Of_Field = OCRText.IndexOf(label, index_Of_Field);
+                index_Of_Field = OCRText.IndexOf(label, index);
                 countOfField = label.Length;
                 while (index_Of_Field == -1)
                 {
                     label = label.Remove(0, 1);
                     countOfField = label.Length;
-                    index_Of_Field = OCRText.IndexOf(label, index_Of_Field);
+                    index_Of_Field = OCRText.IndexOf(label, index);
                     //Error Handle if label not exist 
                     if (countOfField <= 4)
                     {
@@ -29,6 +29,7 @@ namespace OCR_Operations.DataOperations
                     }
                 }
                 index_Of_Field += countOfField;
+                index = index_Of_Field;
             }
 
             return index_Of_Field - countOfField;
@@ -53,7 +54,7 @@ namespace OCR_Operations.DataOperations
                 // If value doesn't match then return blank
                 if (value.Length == 0)
                 {
-                    return "";
+                    return ErrorText;
                 }
                 value = value.Remove((value.Length - 1), 1);
                 match = regex.Match(value);
