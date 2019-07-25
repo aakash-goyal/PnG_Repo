@@ -100,6 +100,10 @@ namespace OCR_Operations
                     case 9:
                         success = extractData.Pulper_Repulper(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 11:
+                        extractData.OCRText = GetOCRText(filePath, 3);
+                        success = extractData.BullDeflector(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 12:
                         success = extractData.LFSR_SoftDoctor(cpeEntryId, cpeDefinitionId);
                         break;
@@ -134,6 +138,10 @@ namespace OCR_Operations
                     case 34:
                         success = extractData.Wire_Section_Shower(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 37:
+                        extractData.OCRText = GetOCRText(filePath, 3);
+                        success = extractData.E_Spray(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 38:
                         success = extractData.Glue_Containmentbox(cpeEntryId, cpeDefinitionId);
                         break;
@@ -151,6 +159,18 @@ namespace OCR_Operations
                         break;
                     case 48:
                         success = extractData.Wire_Edge_Trim(cpeEntryId, cpeDefinitionId);
+                        break;
+                    case 100:
+                        extractData.OCRText = GetOCRText(filePath, 3);
+                        success = extractData.BreastRoll_Internal(cpeEntryId, cpeDefinitionId);
+                        break;
+                    case 101:
+                        extractData.OCRText = GetOCRText(filePath, 2);
+                        success = extractData.DryEnd_Geometry(cpeEntryId, cpeDefinitionId);
+                        break;
+                    case 107:
+                        extractData.OCRText = GetOCRText(filePath, 2,3);
+                        success = extractData.CameraSystem(cpeEntryId, cpeDefinitionId);
                         break;
                     case 109:
                         success = extractData.Headbox_Geometry(cpeEntryId, cpeDefinitionId);
@@ -179,6 +199,10 @@ namespace OCR_Operations
                         break;
                     case 122:
                         success = extractData.Pulper_Curve(cpeEntryId, cpeDefinitionId);
+                        break;
+                    case 128:
+                        extractData.OCRText = GetOCRText(filePath, 3);
+                        success = extractData.DuoCleaner(cpeEntryId, cpeDefinitionId);
                         break;
                     default:
                         success = false;                                     //if wrong definitionId is given

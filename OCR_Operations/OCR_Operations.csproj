@@ -89,6 +89,12 @@
     </Compile>
     <Compile Include="DataOperations\DataInsertion.cs" />
     <Compile Include="DataOperations\ExtractData.cs" />
+    <Compile Include="DataOperations\Extract_BreastRoll_Internal_Data.cs" />
+    <Compile Include="DataOperations\Extract_BullDeflector_Data.cs" />
+    <Compile Include="DataOperations\Extract_CameraSystem_Data.cs" />
+    <Compile Include="DataOperations\Extract_DryEnd_Geometry_Data.cs" />
+    <Compile Include="DataOperations\Extract_DuoCleaner_Data.cs" />
+    <Compile Include="DataOperations\Extract_ESpray_Data.cs" />
     <Compile Include="DataOperations\Extract_Gluebox_GlueHeader_Data.cs" />
     <Compile Include="DataOperations\Extract_Glue_Containmentbox_Data.cs" />
     <Compile Include="DataOperations\Extract_Glue_Turret_Data.cs" />
