@@ -36,12 +36,12 @@ namespace OCR_Operations.DataOperations
         }
         private string RemoveGeneralError_SteamHood(string value)
         {
-            value = value.Replace(" ", "");
+            value = value.Replace(" ", "").Replace("O", "0").Replace("S", "5");
             if (value.Contains(","))
             {
                 value = value.Replace(",", ".");
             }
-            else if (value.Contains("-") && value.IndexOf("-") > 2)
+            else if (value.Contains("-"))
             {
                 value = value.Replace("-", ".");
             }
@@ -68,7 +68,7 @@ namespace OCR_Operations.DataOperations
             List<CpeEntryDataPointValue> cpeDataList = new List<CpeEntryDataPointValue>();
             string value_Label;
             string value;
-            List<DataPointDefinition> dataPointDefinitions = GetDataPointDefinitions(cpeDefinitionId);
+            List<DataPointDefinition> dataPointDefinitions = GetDataPointDefinitions(cpeEntryId);
             OCRText = OCRText.Replace("LEADING EDGE\r\n", "").Replace("TRAILING EDGE\r\n", "");
 
             foreach (var dataPointDefinition in dataPointDefinitions)
@@ -106,7 +106,7 @@ namespace OCR_Operations.DataOperations
                     else if (dataPointDefinition.Title.Contains("- Raised"))
                     {
                         labelIndex = GetFrontLabelIndex_SteamHood("DISTANCE TO WIRE", labelSlotNumber, labelIndex);
-                        slotNumber = 2;                                                                           // As OCR not reading Target Hood Down value
+                        slotNumber = 3;
                         value = GetSlotFrontLabelValue_RefinerCurve(value_Label, slotNumber, labelIndex);
                         value = RemoveGeneralError_SteamHood(value);
                     }

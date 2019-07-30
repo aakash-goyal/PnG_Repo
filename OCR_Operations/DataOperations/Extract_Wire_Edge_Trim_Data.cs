@@ -20,30 +20,26 @@ namespace OCR_Operations.DataOperations
                 // If value doesn't match then return blank
                 if (value.Length == 0)
                 {
-                    return "";
+                    return ErrorText;
                 }
                 value = value.Remove((value.Length - 1), 1);
                 match = regex.Match(value);
             }
             return value;
         }
-        private string RemoveGeneralError_WireEdge(string value)
+        private string RemoveError_NegativeInt_WireEdge(string value)
         {
-            value = value.Replace(" ", "");
+            value = value.Replace(" ", "").Replace("O", "0").Replace("S", "5").Replace("--", "-");
             if (value.Contains(","))
             {
                 value = value.Replace(",", ".");
             }
-            else if (value.Contains("-") && value.IndexOf("-") > 2)
+            else if (value.Contains("-") && value.IndexOf("-") >= 2)
             {
                 value = value.Replace("-", ".");
             }
-            if (value.Contains("+"))
-            {
-                value = value.Replace("+", "").Replace("-", "").Replace("/", "");
-            }
             //Pattern to match decimal number
-            string decimal_Pattern = @"^[0-9]*(\.\d{1,3})?$";
+            string decimal_Pattern = @"^-?[0-9]*(\.\d{1,3})?$";
             Regex regex = new Regex(decimal_Pattern);
             Match match = regex.Match(value);
             while (match.Value == "")
@@ -51,7 +47,7 @@ namespace OCR_Operations.DataOperations
                 // If value doesn't match then return blank
                 if (value.Length == 0)
                 {
-                    return "";
+                    return ErrorText;
                 }
                 value = value.Remove((value.Length - 1), 1);
                 match = regex.Match(value);
@@ -63,124 +59,364 @@ namespace OCR_Operations.DataOperations
         {
             DataInsertion dataInsertion = new DataInsertion();
             List<CpeEntryDataPointValue> cpeDataList = new List<CpeEntryDataPointValue>();
-            int value_Length;                                                               //  Expected Length of values
             string value_Label;
             string value;
-            List<DataPointDefinition> dataPointDefinitions = GetDataPointDefinitions(cpeDefinitionId);
+            List<DataPointDefinition> dataPointDefinitions = GetDataPointDefinitions(cpeEntryId);
+
+            OCRText = OCRText.Replace("\r\nFigure 3\r\n", "\r\n").Replace("\r\nWE Out corner\r\n", "\r\n");
 
             foreach (var dataPointDefinition in dataPointDefinitions)
             {
-                value_Length = 8;
                 int slotNumber = 0;
-                int labelIndex = -1;
+                int labelIndex = 0;
                 if (dataPointDefinition.DataSetDefinitionId == 240)
                 {
                     labelIndex = GetLabelIndex("System Manufacturer");
-                }
-                else if (dataPointDefinition.DataSetDefinitionId == 241)
-                {
-                    labelIndex = GetLabelIndex("Distance to fabric WE");
-                }
-                else if (dataPointDefinition.DataSetDefinitionId == 242)
-                {
-                    labelIndex = GetLabelIndex("WE Out Corner");
-                }
-                else if (dataPointDefinition.DataSetDefinitionId == 243)
-                {
-                    labelIndex = GetLabelIndex("Vacuum Box Inspection Sheet");
-                }
-                if (labelIndex != -1)
-                {
-                    // Single field columns
                     if (dataPointDefinition.Title.Contains("Manufacturer"))
                     {
                         value_Label = dataPointDefinition.Title;
-                        value = GetMeasurementValue(value_Label, value_Length);
+                        value = GetLabelValue_RefinerPlate(value_Label, labelIndex);
                         value = RemoveError_String_WireEdge(value);
                     }
-                    //To get Only Target field of formingwireshower values
-                    else if (dataPointDefinition.Title.Contains("Target") && !dataPointDefinition.Title.Contains("Header"))
+                    else if (dataPointDefinition.Title.Contains("Nozzle Type"))          // Error function update needed if it's value can be Dual Parallel only
                     {
-                        //Define slot number for values to find in Text
-                        slotNumber = 1;
-                        value_Label = dataPointDefinition.Title.Replace(" - Target", "");
-                        if (value_Label.Contains("Corner"))
+                        value_Label = "Nozzle Oriface";
+                        if (dataPointDefinition.IsConstantValue == 1)
                         {
-                            value_Label = "WE In corner";
+                            value = dataPointDefinition.ConstantValue;
                         }
-                        value = GetSlotLabeledValues_FormWise(value_Label, value_Length, slotNumber, labelIndex);  //Refer ExtractData_Wire_Section_Shower for Method definition
-                        value = RemoveGeneralError_WireEdge(value);
-                    }
-                    else if (dataPointDefinition.Title.Contains("Range") && !dataPointDefinition.Title.Contains("Header"))
-                    {
-                        //Define slot number for values to find in Text
-                        slotNumber = 2;
-                        value_Label = dataPointDefinition.Title.Replace(" - Range", "");
-                        if (value_Label.Contains("Corner"))
+                        else if (dataPointDefinition.Title.Contains("TS Wet End"))
                         {
-                            value_Label = "WE In corner";
+                            slotNumber = 2;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveError_String_WireEdge(value);
                         }
-                        value = GetSlotLabeledValues_FormWise(value_Label, value_Length, slotNumber, labelIndex);  //Refer ExtractData_Wire_Section_Shower for Method definition
-                        value = RemoveGeneralError_WireEdge(value);
+                        else if (dataPointDefinition.Title.Contains("TS Dry End"))
+                        {
+                            slotNumber = 3;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveError_String_WireEdge(value);
+                        }
+                        else if (dataPointDefinition.Title.Contains("DS Wet End"))
+                        {
+                            slotNumber = 4;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveError_String_WireEdge(value);
+                        }
+                        else if (dataPointDefinition.Title.Contains("DS Dry End"))
+                        {
+                            slotNumber = 5;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveError_String_WireEdge(value);
+                        }
+                        else
+                        {
+                            continue;
+                        }
                     }
-                    else if (dataPointDefinition.Title.Contains("TS Wet End") && !dataPointDefinition.Title.Contains("Header"))
+                    else if (dataPointDefinition.Title.Contains("Nozzle Oriface"))
                     {
-                        //Define slot number for values to find in Text
-                        slotNumber = 3;
-                        value_Label = dataPointDefinition.Title.Replace(" - TS Wet End", "");
-                        value = GetSlotLabeledValues_FormWise(value_Label, value_Length, slotNumber, labelIndex);  //Refer ExtractData_Wire_Section_Shower for Method definition
-                        value = RemoveGeneralError_WireEdge(value);
+                        value_Label = "Nozzle Oriface";
+                        if (dataPointDefinition.IsConstantValue == 1)
+                        {
+                            value = dataPointDefinition.ConstantValue;
+                        }
+                        else if (dataPointDefinition.Title.Contains("TS Wet End"))
+                        {
+                            slotNumber = 7;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveGeneralError_SteamHood(value);
+                        }
+                        else if (dataPointDefinition.Title.Contains("TS Dry End"))
+                        {
+                            slotNumber = 8;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveGeneralError_SteamHood(value);
+                        }
+                        else if (dataPointDefinition.Title.Contains("DS Wet End"))
+                        {
+                            slotNumber = 9;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveGeneralError_SteamHood(value);
+                        }
+                        else if (dataPointDefinition.Title.Contains("DS Dry End"))
+                        {
+                            slotNumber = 10;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveGeneralError_SteamHood(value);
+                        }
+                        else
+                        {
+                            continue;
+                        }
                     }
-                    else if (dataPointDefinition.Title.Contains("TS Dry End") && !dataPointDefinition.Title.Contains("Header"))
-                    {
-                        //Define slot number for values to find in Text
-                        slotNumber = 4;
-                        value_Label = dataPointDefinition.Title.Replace(" - TS Dry End", "");
-                        value = GetSlotLabeledValues_FormWise(value_Label, value_Length, slotNumber, labelIndex);  //Refer ExtractData_Wire_Section_Shower for Method definition
-                        value = RemoveGeneralError_WireEdge(value);
-                    }
-                    else if (dataPointDefinition.Title.Contains("DS Wet End") && !dataPointDefinition.Title.Contains("Header"))
-                    {
-                        //Define slot number for values to find in Text
-                        slotNumber = 5;
-                        value_Label = dataPointDefinition.Title.Replace(" - DS Wet End", "");
-                        value = GetSlotLabeledValues_FormWise(value_Label, value_Length, slotNumber, labelIndex);  //Refer ExtractData_Wire_Section_Shower for Method definition
-                        value = RemoveGeneralError_WireEdge(value);
-                    }
-                    else if (dataPointDefinition.Title.Contains("DS Dry End") && !dataPointDefinition.Title.Contains("Header"))
-                    {
-                        //Define slot number for values to find in Text
-                        slotNumber = 6;
-                        value_Label = dataPointDefinition.Title.Replace(" - DS Dry End", "");
-                        value = GetSlotLabeledValues_FormWise(value_Label, value_Length, slotNumber, labelIndex);  //Refer ExtractData_Wire_Section_Shower for Method definition
-                        value = RemoveGeneralError_WireEdge(value);
-                    }
-                    //For taking Comments
-                    //else if (dataPointDefinition.Title.Contains("Comments"))
-                    //{
-                    //    // Define new function to take comments
-                    //}
                     else
                     {
                         continue;
                     }
-                    //If value is not found then assign null to value
-                    if (value.Equals(ErrorText))
-                    {
-                        value = "";
-                    }                              //to handle possible common errors in Values
-                                                   // Create CpeEntryDataPoint object with the values obtained
-                    CpeEntryDataPointValue cpeEntryDataPointValue = new CpeEntryDataPointValue
-                    {
-                        DataPointDefinitionId = dataPointDefinition.Id,
-                        Value = value,
-                        IsBlobValue = false,  // Not saving any file for now
-                        CpeDefinitionId = cpeDefinitionId,
-                        CPEEntryId = cpeEntryId
-                    };
-                    // Add new Object to list
-                    cpeDataList.Add(cpeEntryDataPointValue);
                 }
+                else if (dataPointDefinition.DataSetDefinitionId == 241)
+                {
+                    labelIndex = GetLabelIndex("Distance to Fabric WE");
+                    if (dataPointDefinition.Title.Contains("Distance to Fabric WE"))
+                    {
+                        value_Label = "Distance to Fabric WE";
+                        if (dataPointDefinition.IsConstantValue == 1)
+                        {
+                            value = dataPointDefinition.ConstantValue;
+                        }
+                        else if (dataPointDefinition.Title.EndsWith("TS Wet End"))
+                        {
+                            slotNumber = 3;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveGeneralError_SteamHood(value);
+                        }
+                        else if (dataPointDefinition.Title.EndsWith("DS Wet End"))
+                        {
+                            slotNumber = 4;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveGeneralError_SteamHood(value);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else if (dataPointDefinition.Title.Contains("Distance to Fabric DE"))
+                    {
+                        value_Label = "Distance to Fabric DE";
+                        if (dataPointDefinition.IsConstantValue == 1)
+                        {
+                            value = dataPointDefinition.ConstantValue;
+                        }
+                        else if (dataPointDefinition.Title.Contains("TS Dry End"))
+                        {
+                            slotNumber = 3;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveGeneralError_SteamHood(value);
+                        }
+                        else if (dataPointDefinition.Title.Contains("DS Dry End"))
+                        {
+                            slotNumber = 4;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveGeneralError_SteamHood(value);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else if (dataPointDefinition.Title.Contains("MD Angle"))
+                    {
+                        value_Label = "MD Angle";
+                        if (dataPointDefinition.IsConstantValue == 1)
+                        {
+                            value = dataPointDefinition.ConstantValue;
+                        }
+                        else if (dataPointDefinition.Title.EndsWith("TS Wet End"))
+                        {
+                            slotNumber = 2;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveGeneralError_SteamHood(value);
+                        }
+                        else if (dataPointDefinition.Title.Contains("TS Dry End"))
+                        {
+                            slotNumber = 3;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveGeneralError_SteamHood(value);
+                        }
+                        else if (dataPointDefinition.Title.Contains("DS Wet End"))
+                        {
+                            slotNumber = 4;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveGeneralError_SteamHood(value);
+                        }
+                        else if (dataPointDefinition.Title.Contains("DS Dry End"))
+                        {
+                            slotNumber = 5;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveGeneralError_SteamHood(value);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else if (dataPointDefinition.Title.Contains("CD Angle"))
+                    {
+                        value_Label = "CD Angle";
+                        if (dataPointDefinition.IsConstantValue == 1)
+                        {
+                            value = dataPointDefinition.ConstantValue;
+                        }
+                        else if (dataPointDefinition.Title.Contains("TS Wet End"))
+                        {
+                            slotNumber = 3;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveGeneralError_SteamHood(value);
+                        }
+                        else if (dataPointDefinition.Title.Contains("TS Dry End"))
+                        {
+                            slotNumber = 4;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveGeneralError_SteamHood(value);
+                        }
+                        else if (dataPointDefinition.Title.Contains("DS Wet End"))
+                        {
+                            slotNumber = 5;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveGeneralError_SteamHood(value);
+                        }
+                        else if (dataPointDefinition.Title.Contains("DS Dry End"))
+                        {
+                            slotNumber = 6;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveGeneralError_SteamHood(value);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else if (dataPointDefinition.DataSetDefinitionId == 242)
+                {
+                    labelIndex = GetLabelIndex("DS Box");
+                    if (dataPointDefinition.Title.Contains("WE Out Corner"))
+                    {
+                        value_Label = "DS Box";
+                        if (dataPointDefinition.IsConstantValue == 1)
+                        {
+                            value = dataPointDefinition.ConstantValue;
+                        }
+                        else if (dataPointDefinition.Title.Contains("TS Box"))
+                        {
+                            slotNumber = 1;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveError_NegativeInt_WireEdge(value);
+                        }
+                        else if (dataPointDefinition.Title.Contains("DS Box"))
+                        {
+                            slotNumber = 2;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveError_NegativeInt_WireEdge(value);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else if (dataPointDefinition.Title.Contains("WE In Corner"))
+                    {
+                        value_Label = "WE In corner";
+                        if (dataPointDefinition.IsConstantValue == 1)
+                        {
+                            value = dataPointDefinition.ConstantValue;
+                        }
+                        else if (dataPointDefinition.Title.Contains("TS Box"))
+                        {
+                            slotNumber = 3;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveError_NegativeInt_WireEdge(value);
+                        }
+                        else if (dataPointDefinition.Title.Contains("DS Box"))
+                        {
+                            slotNumber = 4;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveError_NegativeInt_WireEdge(value);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else if (dataPointDefinition.Title.Contains("DE Out Corner"))
+                    {
+                        value_Label = "DE Out corner";
+                        if (dataPointDefinition.IsConstantValue == 1)
+                        {
+                            value = dataPointDefinition.ConstantValue;
+                        }
+                        else if (dataPointDefinition.Title.Contains("TS Box"))
+                        {
+                            slotNumber = 2;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveError_NegativeInt_WireEdge(value);
+                        }
+                        else if (dataPointDefinition.Title.Contains("DS Box"))
+                        {
+                            slotNumber = 3;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveError_NegativeInt_WireEdge(value);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else if (dataPointDefinition.Title.Contains("DE In Corner"))
+                    {
+                        value_Label = "DE In corner";
+                        if (dataPointDefinition.IsConstantValue == 1)
+                        {
+                            value = dataPointDefinition.ConstantValue;
+                        }
+                        else if (dataPointDefinition.Title.Contains("TS Box"))
+                        {
+                            slotNumber = 1;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveError_NegativeInt_WireEdge(value);
+                        }
+                        else if (dataPointDefinition.Title.Contains("DS Box"))
+                        {
+                            slotNumber = 2;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveError_NegativeInt_WireEdge(value);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else if (dataPointDefinition.Title.Contains("Box Overbite"))
+                    {
+                        value_Label = "Box Overbite";
+                        if (dataPointDefinition.IsConstantValue == 1)
+                        {
+                            value = dataPointDefinition.ConstantValue;
+                        }
+                        else if (dataPointDefinition.Title.Contains("TS Box"))
+                        {
+                            slotNumber = 3;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveError_NegativeInt_WireEdge(value);
+                        }
+                        else if (dataPointDefinition.Title.Contains("DS Box"))
+                        {
+                            slotNumber = 4;
+                            value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                            value = RemoveError_NegativeInt_WireEdge(value);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+                // Add new Object to list
+                cpeDataList.Add(CreateCpeEntryDataPoint(value, dataPointDefinition.Id, cpeDefinitionId, cpeEntryId));
             }
             //Insert list of cpeentrydatapointvalues in to database using datainsertion class
             bool success = dataInsertion.Insert(cpeDataList);

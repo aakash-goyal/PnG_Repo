@@ -15,36 +15,29 @@ namespace OCR_Operations.DataOperations
             List<CpeEntryDataPointValue> cpeDataList = new List<CpeEntryDataPointValue>();
             string value_Label;
             string value;
-            List<DataPointDefinition> dataPointDefinitions = GetDataPointDefinitions(cpeDefinitionId);
+            List<DataPointDefinition> dataPointDefinitions = GetDataPointDefinitions(cpeEntryId);
 
             foreach (var dataPointDefinition in dataPointDefinitions)
             {
-                int labelIndex = GetLabelIndex("Refiner Mechanical CPE Data");  // GetMeasurement not efficient use Refiner Plate Methods
-                if (dataPointDefinition.DataSetDefinitionId == 9)
+                int labelIndex = GetLabelIndex("Refiner Mechanical CPE Data");
+
+                if (dataPointDefinition.DataSetDefinitionId == 10)            // Check on cpe site if it's can have only limited values
                 {
                     value_Label = dataPointDefinition.Title;
                     value = GetLabelValue_RefinerPlate(value_Label, labelIndex);
-                    // Function to remove error from Values of Refiner#
-                }
-                else if (dataPointDefinition.DataSetDefinitionId == 10)
-                {
-                    value_Label = dataPointDefinition.Title;
-                    value = GetLabelValue_RefinerPlate(value_Label, labelIndex);
-                    // Function to remove error from Values of Door Closure Surface
+                    value = RemoveError_String_WireEdge(value);
                 }
                 else if (dataPointDefinition.DataSetDefinitionId == 11)
                 {
-                    if (dataPointDefinition.Title.Equals("Tram Alignment"))    // Target And max are ignored by It now
+                    if (dataPointDefinition.IsConstantValue == 1)
                     {
-                        value_Label = dataPointDefinition.Title;
-                        value = GetLabelValue_RefinerPlate(value_Label, labelIndex);
-                        // Function to remove error from Values of Tram Alignment
+                        value = dataPointDefinition.ConstantValue;
                     }
                     else if (dataPointDefinition.Title.Contains("Rotating Assembly"))
                     {
                         value_Label = dataPointDefinition.Title.Replace("Rotating Assembly: ", "");
                         value = GetLabelValue_RefinerPlate(value_Label, labelIndex);
-                        // Function to remove error from Values of Rotating Assembly Time
+                        value = RemoveGeneralError_SteamHood(value);
                     }
                     else
                     {
@@ -53,23 +46,31 @@ namespace OCR_Operations.DataOperations
                 }
                 else if (dataPointDefinition.DataSetDefinitionId == 12)
                 {
-                    if (dataPointDefinition.Title.Equals("Backlash (# of handwheel turns)"))    // Target And max are ignored by It now
+                    if (dataPointDefinition.Title.Contains("Blank"))
                     {
-                        value_Label = dataPointDefinition.Title;
-                        value = GetLabelValue_RefinerPlate(value_Label, labelIndex);
-                        // Function to remove error from Values of Adjusting Mechanism Table
+                        continue;
                     }
-                    else if (dataPointDefinition.Title.Equals("Shear Pin Condition"))    // Target And max are ignored by It now
+                    else if (dataPointDefinition.IsConstantValue == 1)
+                    {
+                        value = dataPointDefinition.ConstantValue;
+                    }
+                    else if (dataPointDefinition.Title.Equals("Backlash (# of handwheel turns)"))    // Target And max are ignored by It now
                     {
                         value_Label = dataPointDefinition.Title;
                         value = GetLabelValue_RefinerPlate(value_Label, labelIndex);
-                        // Function to remove error from Values of Adjusting Mechanism Table
+                        value = RemoveGeneralError_SteamHood(value);
+                    }
+                    else if (dataPointDefinition.Title.Equals("Shear Pin Condition"))
+                    {
+                        value_Label = dataPointDefinition.Title;
+                        value = GetLabelValue_RefinerPlate(value_Label, labelIndex);
+                        value = RemoveError_String_WireEdge(value);
                     }
                     else if (dataPointDefinition.Title.Equals("Clutch Coupling"))    // Target And max are ignored by It now
                     {
                         value_Label = dataPointDefinition.Title;
                         value = GetLabelValue_RefinerPlate(value_Label, labelIndex);
-                        // Function to remove error from Values of Adjusting Mechanism Table
+                        value = RemoveError_String_WireEdge(value);
                     }
                     else
                     {
@@ -80,7 +81,7 @@ namespace OCR_Operations.DataOperations
                 {
                     value_Label = dataPointDefinition.Title;
                     value = GetLabelValue_RefinerPlate(value_Label, labelIndex);
-                    // Function to remove error from Values of Spline Components Table
+                    value = RemoveError_String_WireEdge(value);
                 }
                 else
                 {

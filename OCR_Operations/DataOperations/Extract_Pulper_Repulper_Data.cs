@@ -15,26 +15,42 @@ namespace OCR_Operations.DataOperations
             List<CpeEntryDataPointValue> cpeDataList = new List<CpeEntryDataPointValue>();
             string value_Label;
             string value;
-            List<DataPointDefinition> dataPointDefinitions = GetDataPointDefinitions(cpeDefinitionId);
+            List<DataPointDefinition> dataPointDefinitions = GetDataPointDefinitions(cpeEntryId);
 
             foreach (var dataPointDefinition in dataPointDefinitions)
             {
-                if (dataPointDefinition.DataSetDefinitionId == 45)
+                if (dataPointDefinition.DataSetDefinitionId == 44)
                 {
-                    int labelIndex = GetLabelIndex("General Pulper Information");  // GetMeasurement not efficient use Refiner Plate Methods
+                    if (dataPointDefinition.IsConstantValue == 1)
+                    {
+                        value = dataPointDefinition.ConstantValue;
+                    }
+                    else if (!dataPointDefinition.Title.Contains("/"))                              // To ignore Min Max And Target fields of 3,6,9 o'clock of database
+                    {
+                        int labelIndex = GetLabelIndex("Clearance Inspection");
+                        value_Label = dataPointDefinition.Title.Replace("  ", " ");
+                        value = GetLabelValue_RefinerPlate(value_Label, labelIndex);
+                        value = RemoveGeneralError_SteamHood(value);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else if (dataPointDefinition.DataSetDefinitionId == 45)
+                {
+                    int labelIndex = GetLabelIndex("General Pulper Information");
                     if (dataPointDefinition.Title.Contains("Manufacturer"))
                     {
-                        value_Label = dataPointDefinition.Title.Replace("Manufacturer", "Pulper Mfg.");
+                        value_Label = "Pulper Mfg.";
                         value = GetLabelValue_RefinerPlate(value_Label, labelIndex);
-                        // Function to remove error from Values of pulper Mfg.
                     }
                     else if (dataPointDefinition.Title.Contains("Type"))
                     {
-                        value_Label = dataPointDefinition.Title.Replace("Type", "Pulper Type");
+                        value_Label = "Pulper Type";
                         value = GetLabelValue_RefinerPlate(value_Label, labelIndex);
-                        // Function to remove error from Values of pulper type
                     }
-                    else         // to hnadle discrepancies in database
+                    else         // to handle discrepancies in database
                     {
                         continue;
                     }
@@ -53,26 +69,12 @@ namespace OCR_Operations.DataOperations
                         value = RemoveYesNoError_RefinerPlate(value);
                     }
                 }
-                else if (dataPointDefinition.DataSetDefinitionId == 47)
+                else if (dataPointDefinition.DataSetDefinitionId == 47)           // Check if it's filled or not
                 {
                     int labelIndex = GetLabelIndex("Extraction Plate Visual Inspection");
                     value_Label = dataPointDefinition.Title;
                     value = GetLabelValue_RefinerPlate(value_Label, labelIndex);
                     value = RemoveYesNoError_RefinerPlate(value);
-                }
-                else if (dataPointDefinition.DataSetDefinitionId == 44)
-                {
-                    if (!dataPointDefinition.Title.Contains("/"))                              // To ignore Min Max And Target fields of database
-                    {
-                        int labelIndex = GetLabelIndex("Clearance Inspection");
-                        value_Label = dataPointDefinition.Title.Replace("  ", " ");
-                        value = GetLabelValue_RefinerPlate(value_Label, labelIndex);
-                        // Function to remove error from Values of Clearance
-                    }
-                    else
-                    {
-                        continue;
-                    }
                 }
                 else
                 {

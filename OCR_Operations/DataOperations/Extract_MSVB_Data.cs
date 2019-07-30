@@ -28,14 +28,14 @@ namespace OCR_Operations.DataOperations
                         int slotNumber = Convert.ToInt32(dataPointDefinition.Title.Substring(dataPointDefinition.Title.Length - 1));
                         value_Label = dataPointDefinition.Title.Remove(dataPointDefinition.Title.Length - 7);
                         value = GetSlotFrontLabelValue_RefinerCurve(value_Label, slotNumber, labelIndex);
-                        value = RemoveError_YankeeHood(value);                      //As value will be like 0.125
+                        value = RemoveGeneralError_SteamHood(value);                      //As value will be like 0.125
                     }
                     else if (dataPointDefinition.Title.Contains("Maximum"))
                     {
                         int slotNumber = Convert.ToInt32(dataPointDefinition.Title.Substring(dataPointDefinition.Title.Length - 1));
                         value_Label = "Target";
                         value = GetSlotFrontLabelValue_RefinerCurve(value_Label, slotNumber, labelIndex);
-                        value = RemoveError_YankeeHood(value);
+                        value = RemoveGeneralError_SteamHood(value);
                         if (value != "")
                         {
                             value = (Convert.ToInt32(value) + 0.010).ToString();
@@ -46,7 +46,7 @@ namespace OCR_Operations.DataOperations
                         int slotNumber = Convert.ToInt32(dataPointDefinition.Title.Substring(dataPointDefinition.Title.Length - 1));
                         value_Label = "Target";
                         value = GetSlotFrontLabelValue_RefinerCurve(value_Label, slotNumber, labelIndex);
-                        value = RemoveError_YankeeHood(value);
+                        value = RemoveGeneralError_SteamHood(value);
                         if (value != "")
                         {
                             value = (Convert.ToInt32(value) - 0.010).ToString();
@@ -58,7 +58,7 @@ namespace OCR_Operations.DataOperations
                         int slotNumber = 6 * rowNumber + Convert.ToInt32(dataPointDefinition.Title.Substring(dataPointDefinition.Title.Length - 1));
                         value_Label = "Average";
                         value = GetSlotFrontLabelValue_RefinerCurve(value_Label, slotNumber, labelIndex);
-                        value = RemoveError_YankeeHood(value);                      //As value will be like 0.125
+                        value = RemoveGeneralError_SteamHood(value);                      //As value will be like 0.125
                     }
                     else  //Ignore other placeholder titles
                     {

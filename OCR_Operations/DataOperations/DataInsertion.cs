@@ -12,7 +12,7 @@ namespace OCR_Operations.DataOperations
         public Boolean Insert(List<CpeEntryDataPointValue> cpeEntryDataPointValues)
         {
             bool success = true;
-            cpe_devEntities db = new cpe_devEntities();
+            cpe_devEntities1 db = new cpe_devEntities1();
 
             if (cpeEntryDataPointValues.Count == 0)               // If No data is extracted
             {

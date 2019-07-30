@@ -89,6 +89,7 @@
     </Compile>
     <Compile Include="DataOperations\DataInsertion.cs" />
     <Compile Include="DataOperations\ExtractData.cs" />
+    <Compile Include="DataOperations\Extract_Autopic_Data.cs" />
     <Compile Include="DataOperations\Extract_BreastRoll_Internal_Data.cs" />
     <Compile Include="DataOperations\Extract_BullDeflector_Data.cs" />
     <Compile Include="DataOperations\Extract_CameraSystem_Data.cs" />
