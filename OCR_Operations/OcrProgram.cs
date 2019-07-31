@@ -140,6 +140,7 @@ namespace OCR_Operations
                         success = extractData.Wirebox_Ver2(cpeEntryId, cpeDefinitionId);
                         break;
                     case 34:
+                        extractData.OCRText = GetOCRText(filePath, 3);
                         success = extractData.Wire_Section_Shower(cpeEntryId, cpeDefinitionId);
                         break;
                     case 37:

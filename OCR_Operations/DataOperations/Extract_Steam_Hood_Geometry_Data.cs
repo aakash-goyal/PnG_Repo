@@ -36,6 +36,11 @@ namespace OCR_Operations.DataOperations
         }
         private string RemoveGeneralError_SteamHood(string value)
         {
+            Regex regexCheck = new Regex("^[a-zA-Z\\s]+$");
+            if (regexCheck.Match(value).Value != "")
+            {
+                return ErrorText;
+            }
             value = value.Replace(" ", "").Replace("O", "0").Replace("S", "5");
             if (value.Contains(","))
             {
@@ -44,6 +49,10 @@ namespace OCR_Operations.DataOperations
             else if (value.Contains("-"))
             {
                 value = value.Replace("-", ".");
+            }
+            else if (value.Contains(":"))
+            {
+                value = value.Replace(":", ".");
             }
             //Pattern to match decimal number
             string decimal_Pattern = @"^[0-9]*(\.\d{1,3})?$";
