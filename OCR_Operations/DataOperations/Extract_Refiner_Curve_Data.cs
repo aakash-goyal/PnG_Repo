@@ -11,7 +11,7 @@ namespace OCR_Operations.DataOperations
     {
         private int GetFrontLabelIndex_SlotWise(string label, int slotNumber)
         {
-            int index_Of_Field = 0, countOfField = 0;
+            int index_Of_Field = 0, countOfField = 0, index = 0;
             for (int i = 1; i <= slotNumber; i++)
             {
                 index_Of_Field = OCRText.IndexOf(label, index_Of_Field);
@@ -20,7 +20,7 @@ namespace OCR_Operations.DataOperations
                 {
                     label = label.Remove(0, 1);
                     countOfField = label.Length;
-                    index_Of_Field = OCRText.IndexOf(label, index_Of_Field);
+                    index_Of_Field = OCRText.IndexOf(label, index);
                     //Error Handle if label not exist 
                     if (countOfField <= 4)
                     {
@@ -28,6 +28,7 @@ namespace OCR_Operations.DataOperations
                     }
                 }
                 index_Of_Field += countOfField;
+                index = index_Of_Field;
             }
 
             return index_Of_Field - countOfField;
@@ -48,7 +49,10 @@ namespace OCR_Operations.DataOperations
                 }
             }
             int startIndex = OCRText.IndexOf("\r\n", index_Of_Field) + 2;
-
+            if (startIndex == 1 || startIndex >= OCRText.Length)
+            {
+                return ErrorText;
+            }
             for (int i = 1; i < slotNumber; i++)
             {//OCRText.IndexOf("\r\n", (index_Of_Field + countOfField + 2))
                 startIndex = OCRText.IndexOf("\r\n", startIndex) + 2; // add +2 for /r/n characters

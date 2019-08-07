@@ -99,6 +99,10 @@ namespace OCR_Operations
                         extractData.OCRText = GetOCRText(filePath, 3);
                         success = extractData.VSI(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 7:
+                        extractData.OCRText = GetOCRText(filePath, 5);
+                        success = extractData.NossScreen(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 9:
                         extractData.OCRText = GetOCRText(filePath, 6);
                         success = extractData.Pulper_Repulper(cpeEntryId, cpeDefinitionId);
@@ -201,6 +205,9 @@ namespace OCR_Operations
                     case 118:
                         success = extractData.PressureRoll_AirBag(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 117:
+                        success = extractData.Papilion_RefinerPlate(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 120:
                         success = extractData.Refiner_Curve(cpeEntryId, cpeDefinitionId);
                         break;
@@ -214,6 +221,10 @@ namespace OCR_Operations
                     case 128:
                         extractData.OCRText = GetOCRText(filePath, 3);
                         success = extractData.DuoCleaner(cpeEntryId, cpeDefinitionId);
+                        break;
+                    case 131:
+                        extractData.OCRText = GetOCRText(filePath, 3);
+                        success = extractData.PD_Deckle_Position(cpeEntryId, cpeDefinitionId);
                         break;
                     default:
                         success = false;                                     //if wrong definitionId is given

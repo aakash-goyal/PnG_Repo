@@ -36,7 +36,7 @@ namespace OCR_Operations.DataOperations
         }
         private string RemoveGeneralError_SteamHood(string value)
         {
-            Regex regexCheck = new Regex("^[a-zA-Z\\s]+$");
+            Regex regexCheck = new Regex("^[a-zA-Z\\s()]+$");
             if (regexCheck.Match(value).Value != "")
             {
                 return ErrorText;
