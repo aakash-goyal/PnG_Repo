@@ -166,6 +166,10 @@ namespace OCR_Operations
                     case 46:
                         success = extractData.MtHopeRoll_Press(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 47:
+                        extractData.OCRText = GetOCRText(filePath, 1);
+                        success = extractData.MtHopeRoll_DryEnd(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 48:
                         extractData.OCRText = GetOCRText(filePath, 3);
                         success = extractData.Wire_Edge_Trim(cpeEntryId, cpeDefinitionId);
@@ -177,6 +181,10 @@ namespace OCR_Operations
                     case 101:
                         extractData.OCRText = GetOCRText(filePath, 2);
                         success = extractData.DryEnd_Geometry(cpeEntryId, cpeDefinitionId);
+                        break;
+                    case 102:
+                        extractData.OCRText = GetOCRText(filePath, 3);
+                        success = extractData.LFSR_Lower_Wipe(cpeEntryId, cpeDefinitionId);
                         break;
                     case 106:
                         extractData.OCRText = GetOCRText(filePath, 2);

@@ -98,6 +98,10 @@ namespace OCR_Operations.DataOperations
                     double dsPos = Convert.ToDouble(headValues[25704].ToString());
                     double tsPos = Convert.ToDouble(headValues[25701].ToString());
                     value = Math.Round((dsPos - tsPos), 3).ToString();
+                    if (tsPos == 0 || dsPos == 0)
+                    {
+                        value = ErrorText;
+                    }
                 }
                 else if (dataPointDefinition.Title.Contains("Sheet growth"))
                 {
@@ -106,6 +110,10 @@ namespace OCR_Operations.DataOperations
                     double tsPos = Convert.ToDouble(headValues[25701].ToString());
                     double hdWidth = Math.Round((dsPos - tsPos), 3);
                     value = Math.Round((shtWidth - hdWidth), 3).ToString();
+                    if (dsPos == 0 || shtWidth == 0 || tsPos == 0 || hdWidth == 0)
+                    {
+                        value = ErrorText;
+                    }
                 }
                 else if (dataPointDefinition.DPShortName.Contains("SHEET_TS"))
                 {
@@ -115,6 +123,10 @@ namespace OCR_Operations.DataOperations
                     double hdWidth = Math.Round((dsPos - tsPos), 3);
                     double shtGrowth = Math.Round((shtWidth - hdWidth), 3);
                     value = Math.Round((tsPos - (shtGrowth / 2)), 3).ToString();
+                    if (tsPos == 0 || shtWidth == 0 || dsPos == 0 || hdWidth == 0 || shtGrowth == 0)
+                    {
+                        value = ErrorText;
+                    }
                 }
                 else if (dataPointDefinition.DPShortName.Contains("SHEET_DS"))
                 {
@@ -124,6 +136,10 @@ namespace OCR_Operations.DataOperations
                     double hdWidth = Math.Round((dsPos - tsPos), 3);
                     double shtGrowth = Math.Round((shtWidth - hdWidth), 3);
                     value = Math.Round((dsPos + (shtGrowth / 2)), 3).ToString();
+                    if (tsPos == 0 || dsPos == 0 || shtWidth == 0 || hdWidth == 0 || shtGrowth == 0)
+                    {
+                        value = ErrorText;
+                    }
                 }
                 else if (dataPointDefinition.Title.Contains("Thermal Expansion"))
                 {
@@ -171,6 +187,10 @@ namespace OCR_Operations.DataOperations
                     double pdBase = Convert.ToDouble(headValues[dataPointIds[3]].ToString());
                     double pdthermal = Convert.ToDouble(headValues[25827].ToString());
                     value = Math.Round((shtTS + pdthermal + trgAmt - pdBase), 3).ToString();
+                    if (shtTS == 0 || trgAmt == 0 || pdBase == 0 || pdthermal == 0)
+                    {
+                        value = ErrorText;
+                    }
                 }
                 else if (dataPointDefinition.Title.Contains("DS Deckle to face"))
                 {
@@ -179,6 +199,10 @@ namespace OCR_Operations.DataOperations
                     double shtDS = Convert.ToDouble(headValues[25719].ToString());
                     double pdWidth = Convert.ToDouble(headValues[dataPointIds[0]].ToString());
                     value = Math.Round((pdWidth + pdBase + trgAmt - shtDS), 3).ToString();
+                    if (trgAmt == 0 || pdBase == 0 || shtDS == 0 || pdWidth == 0)
+                    {
+                        value = ErrorText;
+                    }
                 }
                 else if (dataPointDefinition.Title.Contains("Sheet Coverage TS - Min"))
                 {
@@ -239,6 +263,10 @@ namespace OCR_Operations.DataOperations
                     double pdBase = Convert.ToDouble(headValues[dataPointIds[3]].ToString());
                     double pdTS = Convert.ToDouble(headValues[dataPointIds[1]].ToString());
                     value = Math.Round((pdBase + pdTS - pdthermal - shtTS), 3).ToString();
+                    if (shtTS == 0 || pdthermal == 0 || pdBase == 0 || pdTS == 0)
+                    {
+                        value = ErrorText;
+                    }
                 }
                 else if (dataPointDefinition.Title.Contains("Sheet Coverage DS"))
                 {
@@ -247,12 +275,20 @@ namespace OCR_Operations.DataOperations
                     double pdDS = Convert.ToDouble(headValues[dataPointIds[2]].ToString());
                     double pdWidth = Convert.ToDouble(headValues[dataPointIds[0]].ToString());
                     value = Math.Round((shtDS - pdBase - pdWidth + pdDS), 3).ToString();
+                    if (shtDS == 0 || pdBase == 0 || pdDS == 0 || pdWidth == 0)
+                    {
+                        value = ErrorText;
+                    }
                 }
                 else if (dataPointDefinition.Title.Contains("TS Deckle to baseline (cold)"))
                 {
                     double pdBase = Convert.ToDouble(headValues[dataPointIds[3]].ToString());
                     double pdTS = Convert.ToDouble(headValues[dataPointIds[1]].ToString());
                     value = Math.Round((pdBase + pdTS), 3).ToString();
+                    if (pdBase == 0 || pdTS == 0)
+                    {
+                        value = ErrorText;
+                    }
                 }
                 else if (dataPointDefinition.Title.Contains("DS Deckle to baseline (cold)"))
                 {
@@ -260,6 +296,10 @@ namespace OCR_Operations.DataOperations
                     double pdDS = Convert.ToDouble(headValues[dataPointIds[2]].ToString());
                     double pdWidth = Convert.ToDouble(headValues[dataPointIds[0]].ToString());
                     value = Math.Round((pdBase + pdWidth - pdDS), 3).ToString();
+                    if (pdBase == 0 || pdDS == 0 || pdWidth == 0)
+                    {
+                        value = ErrorText;
+                    }
                 }
                 else if (dataPointDefinition.Title.Contains("Recommended PD Open Area (Cold)"))
                 {
@@ -267,12 +307,20 @@ namespace OCR_Operations.DataOperations
                     double trgAmt = Convert.ToDouble(headValues[25706].ToString());
                     double shtWidth = Convert.ToDouble(headValues[25710].ToString());
                     value = Math.Round((shtWidth - trgAmt - trgAmt - pdthermal), 3).ToString();
+                    if (pdthermal == 0 || trgAmt == 0 || shtWidth == 0)
+                    {
+                        value = ErrorText;
+                    }
                 }
                 else if (dataPointDefinition.Title.Contains("Recommended PD Open Area (hot)"))
                 {
                     double trgAmt = Convert.ToDouble(headValues[25706].ToString());
                     double shtWidth = Convert.ToDouble(headValues[25710].ToString());
                     value = Math.Round((shtWidth - trgAmt - trgAmt), 3).ToString();
+                    if (trgAmt == 0 || shtWidth == 0)
+                    {
+                        value = ErrorText;
+                    }
                 }
                 else if (dataPointDefinition.Title.Contains("PD Open Area (cold)"))
                 {
@@ -283,6 +331,10 @@ namespace OCR_Operations.DataOperations
                     double dsCold = Math.Round((pdBase + pdWidth - pdDS), 3);
                     double tsCold = Math.Round((pdBase + pdTS), 3);
                     value = (dsCold - tsCold).ToString();
+                    if (pdBase == 0 || pdDS == 0 || pdWidth == 0 || pdTS == 0 || dsCold == 0 || tsCold == 0)
+                    {
+                        value = ErrorText;
+                    }
                 }
                 else
                 {

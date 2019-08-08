@@ -110,6 +110,10 @@ namespace OCR_Operations.DataOperations
         }
         private string RemoveYesNoError_RefinerPlate(string value)
         {
+            if (value.Equals(ErrorText))
+            {
+                return ErrorText;
+            }
             if (value.ToUpper().Contains("YES"))
             {
                 value = "Yes";
