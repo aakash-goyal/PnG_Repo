@@ -107,6 +107,10 @@ namespace OCR_Operations
                         extractData.OCRText = GetOCRText(filePath, 6);
                         success = extractData.Pulper_Repulper(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 10:
+                        extractData.OCRText = GetOCRText(filePath, 5);
+                        success = extractData.Blowoff(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 11:
                         extractData.OCRText = GetOCRText(filePath, 3);
                         success = extractData.BullDeflector(cpeEntryId, cpeDefinitionId);
@@ -140,6 +144,10 @@ namespace OCR_Operations
                     case 28:
                         success = extractData.Spool_Spinner(cpeEntryId, cpeDefinitionId);
                         break;
+                    case 31:
+                        extractData.OCRText = GetOCRText(filePath, 3, 4);
+                        success = extractData.FeltCleaning_Box(cpeEntryId, cpeDefinitionId);
+                        break;
                     case 32:
                         success = extractData.Wirebox_Ver2(cpeEntryId, cpeDefinitionId);
                         break;
@@ -159,6 +167,10 @@ namespace OCR_Operations
                         break;
                     case 40:
                         success = extractData.MSVB(cpeEntryId, cpeDefinitionId);
+                        break;
+                    case 41:
+                        extractData.OCRText = GetOCRText(filePath, 2, 3);
+                        success = extractData.AdditiveFlow(cpeEntryId, cpeDefinitionId);
                         break;
                     case 45:
                         success = extractData.Refiner_Plate_Inspection(cpeEntryId, cpeDefinitionId);

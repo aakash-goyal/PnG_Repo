@@ -16,9 +16,9 @@ namespace OCR_Operations.DataOperations
             string value_Label;
             string value;
             List<DataPointDefinition> dataPointDefinitions = GetDataPointDefinitions(cpeEntryId);
+            OCRText = OCRText.Replace("\r\nTS Distance\r\n", "\r\n").Replace("\r\n1.000\r\n", "\r\n").Replace("\r\n0.125\r\n", "\r\n").Replace("\r\nDS Distance\r\n", "\r\n").Replace("\r\nTS\r\n", "\r\n").Replace("\r\nDS\r\n", "\r\n");
 
-            // DS for second table not readable to OCR in blank check if filled one show value or not
-            foreach (var dataPointDefinition in dataPointDefinitions)
+            foreach (var dataPointDefinition in dataPointDefinitions.Where(item => item.IsCalculated == 0 && item.DPShortName != null))
             {
                 if (dataPointDefinition.DataSetDefinitionId == 486)
                 {
@@ -29,23 +29,51 @@ namespace OCR_Operations.DataOperations
                     }
                     else
                     {
-                        value_Label = dataPointDefinition.Title.Replace("Head Distance - ", "");
-                        value = GetSlotLabelValue_RefinerPlate(value_Label, 3, labelIndex);
-                        // Error handler
+                        string tempOcrText = OCRText;
+                        OCRText = OCRText.Substring(0, GetLabelIndex("Verify Nozzle runs just to deckle area of roll"));
+                        value_Label = "Range";
+                        int slotNumber = 0;
+                        if (dataPointDefinition.Title.Contains("TS"))
+                        {
+                            slotNumber = 1;
+                        }
+                        else
+                        {
+                            slotNumber = 2;
+                        }
+                        value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
+                        value = RemoveGeneralError_SteamHood(value);
+                        OCRText = tempOcrText;
                     }
                 }
                 else if (dataPointDefinition.DataSetDefinitionId == 487)
                 {
+                    string tempOcrText = OCRText;
+                    OCRText = OCRText.Substring(0, GetLabelIndex("Verify nozzle setup as shown below"));
                     int labelIndex = GetLabelIndex("Verify Nozzle runs just to deckle area of roll");
-                    value_Label = dataPointDefinition.Title.Replace("Nozzle ", "");
-                    value = GetLabelValue_RefinerPlate(value_Label, labelIndex);
+                    value_Label = "Yes or No";
+                    int slotNumber = 0;
+                    if (dataPointDefinition.Title.Contains("TS"))
+                    {
+                        slotNumber = 1;
+                    }
+                    else
+                    {
+                        slotNumber = 2;
+                    }
+                    value = GetSlotLabelValue_RefinerPlate(value_Label, slotNumber, labelIndex);
                     value = RemoveYesNoError_RefinerPlate(value);                          //As value only yes or no;
+                    OCRText = tempOcrText;
                 }
                 else if (dataPointDefinition.DataSetDefinitionId == 488)
                 {
-                    int labelIndex = GetLabelIndex("Verify Nozzle runs just to deckle area of roll");
-                    value = GetFrontLabelValue_PulperCurve("Verify nozzle setup as shown below", labelIndex);
+                    string tempOcrText = OCRText;
+                    OCRText = OCRText.Substring(0, GetLabelIndex("General Comments"));
+                    int labelIndex = GetLabelIndex("Yes or No");
+                    value_Label = "Verify nozzle setup as shown below";
+                    value = GetFrontLabelValue_PulperCurve(value_Label, labelIndex);
                     value = RemoveYesNoError_RefinerPlate(value);                             //As value only yes or no;
+                    OCRText = tempOcrText;
                 }
                 else
                 {

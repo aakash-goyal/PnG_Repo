@@ -36,12 +36,16 @@ namespace OCR_Operations.DataOperations
         }
         private string RemoveGeneralError_SteamHood(string value)
         {
+            if (value.Length == 1)
+            {
+                value = value.Replace("O", "0").Replace("S", "5").Replace("Z", "2");
+            }
             Regex regexCheck = new Regex("^[a-zA-Z\\s()]+$");
             if (regexCheck.Match(value).Value != "")
             {
                 return ErrorText;
             }
-            value = value.Replace(" ", "").Replace("O", "0").Replace("S", "5");
+            value = value.Replace(" ", "").Replace("O", "0").Replace("S", "5").Replace("Z", "2");
             if (value.Contains(","))
             {
                 value = value.Replace(",", ".");
@@ -58,6 +62,7 @@ namespace OCR_Operations.DataOperations
             string decimal_Pattern = @"^[0-9]*(\.\d{1,3})?$";
             Regex regex = new Regex(decimal_Pattern);
             Match match = regex.Match(value);
+
             while (match.Value == "")
             {
                 // If value doesn't match then return blank

@@ -19,10 +19,33 @@ namespace OCR_Operations.DataOperations
                            where cpedata.Id == cpeEntryId
                            select cpedata;
             var cpeEntrydata = cpeEntry.ToList().First();
-            var dataset = from dataPoint in cpe_DevEntities.DataPointDefinitions
-                          where (dataPoint.CpeDefinitionId == cpeEntrydata.CpeDefinitionId && (dataPoint.VariantId == cpeEntrydata.CpeDefinitionVariantId))
-                          select dataPoint;
-            return dataset.ToList();
+            //var dataset = from dataPoint in cpe_DevEntities.DataPointDefinitions
+            //              where (dataPoint.CpeDefinitionId == cpeEntrydata.CpeDefinitionId && (dataPoint.VariantId == cpeEntrydata.CpeDefinitionVariantId))
+            //              select dataPoint;
+            //return dataset.ToList();
+
+            var dataset1 = (from dataPoint in cpe_DevEntities.DataPointDefinitions
+                            where (dataPoint.CpeDefinitionId == cpeEntrydata.CpeDefinitionId && (dataPoint.VariantId == cpeEntrydata.CpeDefinitionVariantId))
+                            select dataPoint).ToList();
+            var dataset2 = (from dataPoint in cpe_DevEntities.DataPointDefinitions
+                            where (dataPoint.CpeDefinitionId == cpeEntrydata.CpeDefinitionId && (dataPoint.VariantId == null))
+                            select dataPoint).ToList();
+            List<DataPointDefinition> dataPoints = new List<DataPointDefinition>();
+            foreach (var dataPoint in dataset2)
+            {
+                var variantDataPoint = (dataset1.Where(item => item.SequenceNumber == dataPoint.SequenceNumber && item.DataSetDefinitionId == dataPoint.DataSetDefinitionId)).ToList().FirstOrDefault();
+                if (variantDataPoint != null)
+                {
+                    dataPoints.Add(variantDataPoint);
+                    dataset1.Remove(variantDataPoint);
+                }
+                else
+                {
+                    dataPoints.Add(dataPoint);
+                }
+            }
+            dataPoints.Concat(dataset1);
+            return dataPoints;
         }
         private CpeEntryDataPointValue CreateCpeEntryDataPoint(string value, int dataPointId, int cpeDefinitionId, int cpeEntryId)
         {
